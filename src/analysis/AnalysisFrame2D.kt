@@ -14,11 +14,8 @@ class AnalysisFrame2D(private val model: StructureModel) {
     fun doAnalysis(): Pair<Array<ElementResult>, Array<NodeResult>> {
         mDegreeOfFreedom = model.mNodes.size * 3
         val K = calculateStiffnessMatrix()
-        println(K)
         val P = calculateLoadVector()
-        println(P)
         val Kb = calculateStiffnessMatrixBoundaryCondition(K)
-        println(Kb)
         val D = MatrixLib.solveSystem(Kb, P)
         P.showAsNodeDirections()
         D.showAsNodeDirections()
@@ -44,10 +41,10 @@ class AnalysisFrame2D(private val model: StructureModel) {
             val loadVectorOfNode = it.calculateGlobalLoadVector(mDegreeOfFreedom)
             loadVector += loadVectorOfNode
         }
-        /*model.mElements.forEach {
+        model.mElements.forEach {
             val loadVectorOfElement = it.calculateGlobalLoadVector(mDegreeOfFreedom)
             loadVector += loadVectorOfElement
-        }*/
+        }
         return loadVector
     }
 
