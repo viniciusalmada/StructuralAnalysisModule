@@ -1,0 +1,5 @@
+package entitites
+
+class NodeResult {
+
+}
