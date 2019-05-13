@@ -1,20 +1,45 @@
 package entitites
 
+import model.StructureModel
 import vsca.doublematrix.lib.DoubleMatrix
 import java.lang.Math.pow
 import java.lang.Math.sqrt
 
 @Suppress("LocalVariableName", "UnnecessaryVariable", "FunctionName", "MemberVisibilityCanBePrivate")
-class Element(
-	val id: Int,
-	val node_i: Node,
-	val node_j: Node,
-	val material: Material,
-	val section: Section,
-	val hasHingeBegin: Boolean = false,
-	val hasHingeEnd: Boolean = false,
-	val load: DistributedLoad? = null
-) {
+class Element {
+	val id: Int
+	val node_i: Node
+	val node_j: Node
+	val material: Material
+	val section: Section
+	val hasHingeBegin: Boolean
+	val hasHingeEnd: Boolean
+	var load: DistributedLoad?
+	
+	constructor(
+		id: Int,
+		nodeId_i: Int,
+		nodeId_j: Int,
+		materialId: Int,
+		sectionId: Int,
+		hasHingeBegin: Boolean = false,
+		hasHingeEnd: Boolean = false,
+		loadId: Int = -1,
+		model: StructureModel
+	) {
+		this.id = id
+		this.node_i = model.mNodes.single { it.id == nodeId_i }
+		this.node_j = model.mNodes.single { it.id == nodeId_j }
+		this.material = model.mMaterials.single { it.id == materialId }
+		this.section = model.mSections.single { it.id == sectionId }
+		this.hasHingeBegin = hasHingeBegin
+		this.hasHingeEnd = hasHingeEnd
+		try {
+			this.load = model.mDistributedLoad.single { it.id == loadId }
+		} catch (e: NoSuchElementException) {
+			this.load = null
+		}
+	}
 	/*private constructor(id: Int, node_i: Node, node_j: Node, material: Material, section: Section) : this(
 		id,
 		node_i,
@@ -166,7 +191,7 @@ class Element(
 		var r = DoubleMatrix(6, 1)
 		if (this.load == null)
 			return r
-		r = load.getSupportReaction(L(), sinA(), cosA(), hasHingeBegin, hasHingeEnd)
+		r = load!!.getSupportReaction(L(), sinA(), cosA(), hasHingeBegin, hasHingeEnd)
 		return r * -1.0
 	}
 	

@@ -7,8 +7,8 @@ class Section(
     val width: Double,
     val height: Double
 ) {
-
-    fun getArea(): Double = /*width * height*/ 0.008
-
-    fun getInertiaMoment(): Double = /*(width * pow(height, 3.0)) / 12.0*/ 0.0004
+	
+	fun getArea(): Double = width * height
+	
+	fun getInertiaMoment(): Double = (width * pow(height, 3.0)) / 12.0
 }
