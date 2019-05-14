@@ -4,22 +4,20 @@ import entitites.ElementResult
 import entitites.NodeResult
 import model.StructureModel
 import utils.SupportCondition.FIX
-import utils.showAsNodeDirections
 import vsca.doublematrix.lib.DoubleMatrix
 import vsca.doublematrix.lib.MatrixLib
 
 class AnalysisFrame2D(private val model: StructureModel) {
 	private var mDegreeOfFreedom: Int = 0
 	
-	fun doAnalysis(): Pair<Array<ElementResult>, Array<NodeResult>> {
+	fun doAnalysis(): Pair<ArrayList<ElementResult>, ArrayList<NodeResult>> {
 		mDegreeOfFreedom = model.mNodes.size * 3
-		val K = calculateStiffnessMatrix()
+		val K = calculateStiffnessMatrix(true)
 		val P = calculateLoadVector()
 		val Kb = calculateStiffnessMatrixBoundaryCondition(K)
 		val D = calculateDisplacementsVector(Kb, P)
-		D.showAsNodeDirections()
-		
-		TODO()
+		val R = calculateSupportReactionsVector(P, D)
+		return calculateResults(D, R)
 	}
 	
 	/**
@@ -27,15 +25,17 @@ class AnalysisFrame2D(private val model: StructureModel) {
 	 *
 	 * @return stiffness matrix
 	 */
-	private fun calculateStiffnessMatrix(): DoubleMatrix {
+	private fun calculateStiffnessMatrix(includeSprings: Boolean): DoubleMatrix {
 		var stiffMatrix = DoubleMatrix(mDegreeOfFreedom)
 		model.mElements.forEach {
 			val stiffMatrixOfElement = it.calculateGlobalStiffnessMatrix(mDegreeOfFreedom)
 			stiffMatrix += stiffMatrixOfElement
 		}
-		model.mNodes.forEach {
-			val stiffMatrixOfNode = it.calculateStiffnessMatrix(mDegreeOfFreedom)
-			stiffMatrix += stiffMatrixOfNode
+		if (includeSprings) {
+			model.mNodes.forEach {
+				val stiffMatrixOfNode = it.calculateStiffnessMatrix(mDegreeOfFreedom)
+				stiffMatrix += stiffMatrixOfNode
+			}
 		}
 		return stiffMatrix
 	}
@@ -93,12 +93,36 @@ class AnalysisFrame2D(private val model: StructureModel) {
 		return MatrixLib.solveSystem(Kb, P)
 	}
 	
-	private fun calculateSupportReactionsVector(): DoubleMatrix {
-		TODO()
+	private fun calculateSupportReactionsVector(P: DoubleMatrix, D: DoubleMatrix): DoubleMatrix {
+		var R = DoubleMatrix(mDegreeOfFreedom, 1)
+		model.mElements.forEach {
+			val eRes = ElementResult(it, D, mDegreeOfFreedom)
+			R += eRes.rg
+		}
+		R += (P * -1.0)
+		return R
 	}
 	
-	private fun calculateResults(): Pair<Array<ElementResult>, Array<NodeResult>> {
-		TODO()
+	private fun calculateResults(
+		D: DoubleMatrix,
+		R: DoubleMatrix
+	): Pair<ArrayList<ElementResult>, ArrayList<NodeResult>> {
+		val elemsResArray = ArrayList<ElementResult>()
+		val nodesResArray = ArrayList<NodeResult>()
+		model.mElements.forEach {
+			elemsResArray.add(ElementResult(it, D, mDegreeOfFreedom))
+		}
+		model.mNodes.forEach {
+			val displacs = DoubleArray(3)
+			val reactions = DoubleArray(3)
+			it.getDirections().forEachIndexed { index, direction ->
+				displacs[index] = D[direction - 1, 0]
+				reactions[index] = R[direction - 1, 0]
+			}
+			nodesResArray.add(NodeResult(it, displacs, reactions))
+		}
+		
+		return Pair(elemsResArray, nodesResArray)
 	}
 	
 }

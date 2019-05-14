@@ -5,7 +5,10 @@ import vsca.doublematrix.lib.DoubleMatrix
 import java.lang.Math.pow
 import java.lang.Math.sqrt
 
-@Suppress("LocalVariableName", "UnnecessaryVariable", "FunctionName", "MemberVisibilityCanBePrivate")
+@Suppress(
+	"LocalVariableName", "UnnecessaryVariable", "FunctionName", "MemberVisibilityCanBePrivate",
+	"ConvertSecondaryConstructorToPrimary"
+)
 class Element {
 	val id: Int
 	val node_i: Node
@@ -83,14 +86,14 @@ class Element {
 		return P
 	}
 	
-	private fun calculateLocalStiffnessMatrixOnGlobalSystem(): DoubleMatrix {
+	/*private*/ fun calculateLocalStiffnessMatrixOnGlobalSystem(): DoubleMatrix {
 		val k_ = calculateLocalStiffnessMatrixOnLocalSystem()
 		val R = calculateRotationMatrix()
 		val k = R.transpose() * k_ * R
 		return k
 	}
 	
-	private fun calculateIncidenceMatrix(degreeOfFreedom: Int): DoubleMatrix {
+	/*private*/ fun calculateIncidenceMatrix(degreeOfFreedom: Int): DoubleMatrix {
 		val B = DoubleMatrix(6, degreeOfFreedom)
 		val i = this.node_i.id
 		val j = this.node_j.id
@@ -100,7 +103,7 @@ class Element {
 		return B
 	}
 	
-	private fun calculateLocalStiffnessMatrixOnLocalSystem(): DoubleMatrix {
+	/*private*/ fun calculateLocalStiffnessMatrixOnLocalSystem(): DoubleMatrix {
 		var k_ = DoubleMatrix(6, 6)
 		k_[0, 0] = EA() / L()
 		k_[0, 3] = -EA() / L()
@@ -164,7 +167,7 @@ class Element {
 		return k_
 	}
 	
-	private fun calculateRotationMatrix(): DoubleMatrix {
+	/*private*/ fun calculateRotationMatrix(): DoubleMatrix {
 		val R = DoubleMatrix(6, 6)
 		R[0, 0] = cosA()
 		R[0, 1] = sinA()
@@ -187,7 +190,7 @@ class Element {
 		return f
 	}
 	
-	private fun calculateLocalLoadVectorOnLocalSystem(): DoubleMatrix {
+	/*private*/ fun calculateLocalLoadVectorOnLocalSystem(): DoubleMatrix {
 		var r = DoubleMatrix(6, 1)
 		if (this.load == null)
 			return r
@@ -213,5 +216,13 @@ class Element {
 		element.append("A = ${section.getArea()} m²\t")
 		element.append("I = ${section.getInertiaMoment()} m4\t")
 		return element.toString()
+	}
+	
+	override fun hashCode(): Int {
+		return id
+	}
+	
+	override fun equals(other: Any?): Boolean {
+		return this.id == (other as Element).id
 	}
 }
