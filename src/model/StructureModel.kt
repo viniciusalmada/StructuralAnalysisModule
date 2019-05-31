@@ -1,60 +1,120 @@
 package model
 
-import analysis.AnalysisFrame2D
-import entitites.*
-import utils.SupportCondition.*
+import analysis.Analysis
+import analysis.AnalysisPlaneFrame
+import analysis.AnalysisPlaneTruss
+import com.google.gson.Gson
+import elems.*
+import elems.planeframe.ElementPF
+import elems.planeframe.NodePF
+import elems.planetruss.ElementPT
+import elems.planetruss.NodePT
+import java.io.File
+import java.io.FileReader
 
-class StructureModel {
-	val mNodes = HashSet<Node>()
-	val mElements = HashSet<Element>()
+class StructureModel(file: File) {
+	val mNodes = HashSet<NodeAbs>()
+	val mElements = HashSet<ElementAbs>()
 	val mMaterials = HashSet<Material>()
 	val mSections = HashSet<Section>()
-	val mDistributedLoad = HashSet<DistributedLoad>()
-	val mAnalisysType = AnalysisFrame2D(this)
+	val mDistributedLoads = HashSet<DistributedLoad>()
+	val mAnalisysType: Analysis
 	
 	init {
-		/*mNodes.add(Node(1, 0.0, 0.0, arrayOf(FIX, FIX, FIX)))
-		mNodes.add(Node(2, 4.0, 0.0, arrayOf(FIX, FIX, FIX)))
-		mNodes.add(Node(3, 8.0, 0.0, arrayOf(FIX, FIX, FIX)))
-		mNodes.add(Node(4, 4.0, 4.0, arrayOf(FREE, FREE, FREE), doubleArrayOf(600.0, -1000.0, 300.0)))
-		mNodes.add(Node(5, 8.0, 4.0, arrayOf(FREE, FREE, FREE), doubleArrayOf(0.0, -800.0, 0.0)))
+		val dataModel = Gson().fromJson(FileReader(file), StructureDataModel::class.java)
 		
-		mMaterials.add(Material(1, 1.5e7, 0.2))
+		when (dataModel.analysis) {
+			"elems/planeframe" -> {
+				loadPFModel(dataModel)
+				
+				mAnalisysType = AnalysisPlaneFrame(this)
+				val res = mAnalisysType.doAnalysis()
+				
+				val gson = Gson()
+				val str = gson.toJson(res)
+				println(str)
+			}
+			"elems/planetruss" -> {
+				loadPTModel(dataModel)
+				mAnalisysType = AnalysisPlaneTruss(this)
+				val res = mAnalisysType.doAnalysis()
+				val gson = Gson()
+				val str = gson.toJson(res)
+				println(str)
+			}
+			else -> mAnalisysType = AnalysisPlaneTruss(this)
+		}
+	}
+	
+	private fun loadPFModel(dataModel: StructureDataModel) {
+		for (n in dataModel.nodes) {
+			val node = NodePF(n.id, n.x, n.y, n.suppCond, n.suppValues)
+			mNodes.add(node)
+		}
 		
-		mSections.add(Section(1, 0.2, 0.6))
-		mSections.add(Section(2, 0.2, 0.3))
+		for (m in dataModel.materials) {
+			val material = Material(m.id, m.longitudinalElasticityModule, m.poissonCoefficient)
+			mMaterials.add(material)
+		}
 		
-		mElements.add(Element(1, 1, 4, 1, 1, model = this))
-		mElements.add(Element(2, 2, 4, 1, 1, model = this))
-		mElements.add(Element(3, 3, 5, 1, 1, model = this))
-		mElements.add(Element(4, 4, 5, 1, 2, model = this))*/
+		for (s in dataModel.sections) {
+			val section = Section(s.id, s.width, s.height)
+			mSections.add(section)
+		}
 		
-		val n1 = Node(1, 0.0, 0.0, arrayOf(FIX, FIX, FIX))
-		val n2 = Node(2, 12.0, 0.0, arrayOf(FIX, FIX, SPRING), doubleArrayOf(0.0, 0.0, 80_000.0))
-		val n3 = Node(3, 0.0, 2.0, arrayOf(FREE, FREE, FREE), doubleArrayOf(20.0, 0.0, 0.0))
-		val n4 = Node(4, 0.0, 6.0, arrayOf(FREE, FREE, FREE), doubleArrayOf(20.0, 0.0, 0.0))
-		val n5 = Node(5, 12.0, 7.0)
-		val n6 = Node(6, 12.0, 11.0)
-		mNodes.addAll(listOf(n1, n2, n3, n4, n5, n6))
+		for (dl in dataModel.distributedLoads) {
+			val loads = DistributedLoad(dl.id, dl.qxi, dl.qxj, dl.qyi, dl.qyj, dl.isLocalLoad)
+			mDistributedLoads.add(loads)
+		}
 		
-		val m1 = Material(1, 2e8, 0.2)
-		mMaterials.add(m1)
+		for (e in dataModel.elements) {
+			val elem = ElementPF(
+				e.id,
+				e.nodeId_i,
+				e.nodeId_j,
+				e.materialId,
+				e.sectionId,
+				e.hasHingedBegin,
+				e.hasHingedEnd,
+				e.loadId,
+				this
+			)
+			mElements.add(elem)
+		}
+	}
+	
+	private fun loadPTModel(dataModel: StructureDataModel) {
+		for (n in dataModel.nodes) {
+			val node = NodePT(n.id, n.x, n.y, n.suppCond, n.suppValues)
+			mNodes.add(node)
+		}
 		
-		val s1 = Section(1, 0.0103279, 0.7745966)
-		mSections.add(s1)
+		for (m in dataModel.materials) {
+			val material = Material(m.id, m.longitudinalElasticityModule, m.poissonCoefficient)
+			mMaterials.add(material)
+		}
 		
-		val l1 = DistributedLoad(1, 0.0, -12.0, false)
-		val l2 = DistributedLoad(2, -10.0, -20.0, -10.0, -20.0, false)
-		mDistributedLoad.addAll(listOf(l1, l2))
+		for (s in dataModel.sections) {
+			val section = Section(s.id, s.width, s.height)
+			mSections.add(section)
+		}
 		
-		val e1 = Element(1, 1, 3, 1, 1, model = this)
-		val e2 = Element(2, 2, 5, 1, 1, model = this)
-		val e3 = Element(3, 3, 4, 1, 1, hasHingeEnd = true, model = this)
-		val e4 = Element(4, 3, 5, 1, 1, loadId = 1, model = this)
-		val e5 = Element(5, 4, 6, 1, 1, hasHingeBegin = true, loadId = 1, model = this)
-		val e6 = Element(6, 6, 5, 1, 1, model = this)
-		mElements.addAll(listOf(e1, e2, e3, e4, e5, e6))
+		for (dl in dataModel.distributedLoads) {
+			val loads = DistributedLoad(dl.id, dl.qxi, dl.qxj, dl.qyi, dl.qyj, dl.isLocalLoad)
+			mDistributedLoads.add(loads)
+		}
 		
-		@Suppress("UNUSED_VARIABLE") val res = mAnalisysType.doAnalysis()
+		for (e in dataModel.elements) {
+			val elem = ElementPT(
+				e.id,
+				e.nodeId_i,
+				e.nodeId_j,
+				e.materialId,
+				e.sectionId,
+				e.loadId,
+				this
+			)
+			mElements.add(elem)
+		}
 	}
 }

@@ -1,9 +1,11 @@
-package entitites
+package elems.results
 
+import elems.ElementAbs
 import vsca.doublematrix.lib.DoubleMatrix
 
 @Suppress("UNUSED_PARAMETER")
-class ElementResult(element: Element, D: DoubleMatrix, dof: Int) {
+class ElementResult(element: ElementAbs, D: DoubleMatrix, dof: Int) {
+	val id: Int = element.mId
 	val dg: DoubleMatrix // Displacements global
 	val d: DoubleMatrix // Displacements local
 	val f: DoubleMatrix // Forces local

@@ -1,0 +1,130 @@
+{
+	"analysis": "PLANE_FRAME",
+	"nodes": [
+		{
+			"id": 1,
+			"x": 0.0,
+			"y": 0.0,
+			"suppCond": ["FIX", "FIX", "FIX"],
+			"suppValues": [0.0, 0.0, 0.0]
+		}, {
+			"id": 2,
+			"x": 12.0,
+			"y": 0.0,
+			"suppCond": ["FIX", "FIX", "SPRING"],
+			"suppValues": [0.0, 0.0, 80000.0]
+		}, {
+			"id": 3,
+			"x": 0.0,
+			"y": 2.0,
+			"suppCond": ["FREE", "FREE", "FREE"],
+			"suppValues": [20.0, 0.0, 0.0]
+		}, {
+			"id": 4,
+			"x": 0.0,
+			"y": 6.0,
+			"suppCond": ["FREE", "FREE", "FREE"],
+			"suppValues": [20.0, 0.0, 0.0]
+		}, {
+			"id": 5,
+			"x": 12.0,
+			"y": 7.0,
+			"suppCond": ["FREE", "FREE", "FREE"],
+			"suppValues": [0.0, 0.0, 0.0]
+		}, {
+			"id": 6,
+			"x": 12.0,
+			"y": 11.0,
+			"suppCond": ["FREE", "FREE", "FREE"],
+			"suppValues": [0.0, 0.0, 0.0]
+		}
+	],
+	"materials": [
+		{
+			"id": 1,
+			"longitudinalElasticityModule": 2e8,
+			"poissonCoefficient": 0.2
+		}
+	],
+	"sections": [
+		{
+			"id": 1,
+			"width": 0.0103279,
+			"height": 0.7745966
+		}
+	],
+	"distributedLoads": [
+		{
+			"id": 1,
+			"qxi": 0.0,
+			"qxj": 0.0,
+			"qyi": -12.0,
+			"qyj": -12.0,
+			"isLocalLoad": false
+		}, {
+			"id": 2,
+			"qxi": -10.0,
+			"qxj": -20.0,
+			"qyi": -10.0,
+			"qyj": -20.0,
+			"isLocalLoad": false
+		}
+	],
+	"elements": [
+		{
+			"id": 1,
+			"nodeId_i": 1,
+			"nodeId_j": 3,
+			"materialId": 1,
+			"sectionId": 1,
+			"hasHingedBegin": false,
+			"hasHingedEnd": false,
+			"loadId": -1
+		}, {
+			"id": 2,
+			"nodeId_i": 2,
+			"nodeId_j": 5,
+			"materialId": 1,
+			"sectionId": 1,
+			"hasHingedBegin": false,
+			"hasHingedEnd": false,
+			"loadId": -1
+		}, {
+			"id": 3,
+			"nodeId_i": 3,
+			"nodeId_j": 4,
+			"materialId": 1,
+			"sectionId": 1,
+			"hasHingedBegin": false,
+			"hasHingedEnd": true,
+			"loadId": -1
+		}, {
+			"id": 4,
+			"nodeId_i": 3,
+			"nodeId_j": 5,
+			"materialId": 1,
+			"sectionId": 1,
+			"hasHingedBegin": false,
+			"hasHingedEnd": false,
+			"loadId": 1
+		}, {
+			"id": 5,
+			"nodeId_i": 4,
+			"nodeId_j": 6,
+			"materialId": 1,
+			"sectionId": 1,
+			"hasHingedBegin": true,
+			"hasHingedEnd": false,
+			"loadId": 1
+		}, {
+			"id": 6,
+			"nodeId_i": 6,
+			"nodeId_j": 5,
+			"materialId": 1,
+			"sectionId": 1,
+			"hasHingedBegin": false,
+			"hasHingedEnd": false,
+			"loadId": -1
+		}
+	]
+}
