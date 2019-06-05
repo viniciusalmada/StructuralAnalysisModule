@@ -1,14 +1,14 @@
 package elems
 
-import java.lang.Math.pow
-
-class Section(
-    val id: Int,
-    val width: Double,
-    val height: Double
-) {
+class Section(id: Int, area: Double, inertiaZ: Double, inertiaY: Double) {
+	val mId: Int = id
+	val mArea: Double = area
+	val mInertiaMomentZ: Double = inertiaZ
+	val mInertiaMomentY: Double = inertiaY
 	
-	fun getArea(): Double = width * height
+	fun getPolarInertiaMoment() = this.mInertiaMomentZ + this.mInertiaMomentY
 	
-	fun getInertiaMoment(): Double = (width * pow(height, 3.0)) / 12.0
+	/*fun getArea(): Double = width * height
+	
+	fun getInertiaMoment(): Double = (width * pow(height, 3.0)) / 12.0*/
 }

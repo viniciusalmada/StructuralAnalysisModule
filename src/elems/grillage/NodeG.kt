@@ -1,33 +1,32 @@
-package elems.planeframe
+package elems.grillage
 
 import elems.NodeAbs
-import utils.DOF_NODE_PLANE_FRAME
+import utils.DOF_NODE_GRILLAGE
 import utils.INVALID_DIRECTION
 import utils.SupportCondition
 import vsca.doublematrix.lib.DoubleMatrix
 
-class NodePF(id: Int, x: Double, y: Double, suppCondStrings: Array<String>, suppValues: DoubleArray) :
-	NodeAbs(id, x, y, 0.0, suppCondStrings, suppValues) {
+class NodeG(id: Int, z: Double, x: Double, suppCondStrings: Array<String>, suppValues: DoubleArray) :
+	NodeAbs(id, x, 0.0, z, suppCondStrings, suppValues) {
+	
 	
 	override fun calculateStiffnessMatrix(degreeOfFreedom: Int): DoubleMatrix {
 		val K = DoubleMatrix(degreeOfFreedom)
 		mSupportCondition.forEachIndexed { index, supportCondition ->
-			if (supportCondition == SupportCondition.SPRING) {
-				val k = mSupportValues[index]
-				val direction = when (index) {
-					0 -> DOF_NODE_PLANE_FRAME * mId - 2
-					1 -> DOF_NODE_PLANE_FRAME * mId - 1
-					2 -> DOF_NODE_PLANE_FRAME * mId
-					else -> INVALID_DIRECTION
-				}
-				K[direction - 1, direction - 1] += k
+			val k = mSupportValues[index]
+			val direction = when (index) {
+				0 -> DOF_NODE_GRILLAGE * mId - 2
+				1 -> DOF_NODE_GRILLAGE * mId - 1
+				2 -> DOF_NODE_GRILLAGE * mId
+				else -> INVALID_DIRECTION
 			}
+			K[direction - 1, direction - 1] += k
 		}
 		return K
 	}
 	
 	override fun calculateIncidenceMatrix(degreeOfFreedom: Int): DoubleMatrix {
-		val B = DoubleMatrix(DOF_NODE_PLANE_FRAME, degreeOfFreedom)
+		val B = DoubleMatrix(DOF_NODE_GRILLAGE, degreeOfFreedom)
 		val e = getDirections()
 		for (i in 1..B.rows)
 			B[i - 1, e[i - 1] - 1] = 1.0
@@ -36,7 +35,7 @@ class NodePF(id: Int, x: Double, y: Double, suppCondStrings: Array<String>, supp
 	}
 	
 	override fun calculateLocalLoadVector(): DoubleMatrix {
-		val f = DoubleMatrix(DOF_NODE_PLANE_FRAME, 1)
+		val f = DoubleMatrix(DOF_NODE_GRILLAGE, 1)
 		mSupportCondition.forEachIndexed { index, supportCondition ->
 			if (supportCondition == SupportCondition.FREE && mSupportValues[index] != 0.0) {
 				f[index, 0] = mSupportValues[index]
@@ -47,9 +46,10 @@ class NodePF(id: Int, x: Double, y: Double, suppCondStrings: Array<String>, supp
 	
 	override fun getDirections(): IntArray {
 		return intArrayOf(
-			DOF_NODE_PLANE_FRAME * mId - 2,
-			DOF_NODE_PLANE_FRAME * mId - 1,
-			DOF_NODE_PLANE_FRAME * mId
+			DOF_NODE_GRILLAGE * mId - 2,    //	Torsion Moment
+			DOF_NODE_GRILLAGE * mId - 1,    //	Shear Force
+			DOF_NODE_GRILLAGE * mId            //	Beam Moment
 		)
 	}
+	
 }

@@ -3,6 +3,7 @@ package analysis
 import elems.results.ElementResult
 import elems.results.NodeResult
 import model.StructureModel
+import utils.showAsNodeDirections
 import vsca.doublematrix.lib.DoubleMatrix
 import vsca.doublematrix.lib.MatrixLib
 
@@ -21,6 +22,7 @@ abstract class Analysis(protected val mModel: StructureModel, private val mDOFBy
 	fun doAnalysis(): Pair<ArrayList<ElementResult>, ArrayList<NodeResult>> {
 		val K = calculateStiffnessMatrix()
 		val P = calculateLoadVector()
+		P.showAsNodeDirections()
 		val Kb = calculateStiffnessMatrixBoundaryCondition(K)
 		val D = calculateDisplacementsVector(Kb, P)
 		val R = calculateSupportReactionsVector(P, D)

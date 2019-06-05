@@ -42,15 +42,15 @@
 	"materials": [
 		{
 			"id": 1,
-			"longitudinalElasticityModule": 2e8,
-			"poissonCoefficient": 0.2
+			"longElastModulus": 2e8,
+			"poissonRatio": 0.2
 		}
 	],
 	"sections": [
 		{
 			"id": 1,
-			"width": 0.0103279,
-			"height": 0.7745966
+			"area": 0.008,
+			"inertiaMomentZ": 0.0004
 		}
 	],
 	"distributedLoads": [

@@ -13,20 +13,23 @@ data class StructureDataModel(
 		val id: Int,
 		val x: Double,
 		val y: Double,
+		val z: Double,
 		val suppCond: Array<String>,
 		val suppValues: DoubleArray
 	)
 	
 	data class MaterialData(
 		val id: Int,
-		val longitudinalElasticityModule: Double,
-		val poissonCoefficient: Double
+		val longElastModulus: Double,
+		val poissonRatio: Double,
+		val transElastModulus: Double
 	)
 	
 	data class SectionData(
 		val id: Int,
-		val width: Double,
-		val height: Double
+		val area: Double,
+		val inertiaMomentZ: Double,
+		val inertiaMomentY: Double
 	)
 	
 	data class DistributedLoad(

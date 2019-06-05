@@ -59,7 +59,7 @@ class ElementPT(
 		var r = DoubleMatrix(DOF_ELEM_PLANE_TRUSS, 1)
 		if (this.mLoad == null)
 			return r
-		r = mLoad.getPlaneTrussSupportReaction(L(), sinA(), cosA(), mHasHingeBegin, mHasHingeEnd)
+		r = mLoad.getPlaneTrussSupportReaction(L(), sinA(), cosA())
 		return r * -1.0
 	}
 	

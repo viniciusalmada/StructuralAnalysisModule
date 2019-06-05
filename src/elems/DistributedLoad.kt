@@ -1,5 +1,6 @@
 package elems
 
+import utils.DOF_ELEM_GRILLAGE
 import utils.DOF_ELEM_PLANE_FRAME
 import utils.DOF_ELEM_PLANE_TRUSS
 import vsca.doublematrix.lib.DoubleMatrix
@@ -97,6 +98,58 @@ class DistributedLoad(
 			r[3, 0] = -(q_yi + 2 * q_yj) * L / 6
 			return r
 		}
+		
+		private fun getOnFixedFixedGrillage(
+			L: Double,
+			q_yi: Double,
+			q_yj: Double
+		): DoubleMatrix {
+			val r = DoubleMatrix(DOF_ELEM_GRILLAGE, 1)
+			r[1, 0] = -(7 * q_yi + 3 * q_yj) * L / 20
+			r[2, 0] = -(3 * q_yi + 2 * q_yj) * pow(L, 2.0) / 60
+			r[4, 0] = -(3 * q_yi + 7 * q_yj) * L / 20
+			r[5, 0] = (2 * q_yi + 3 * q_yj) * pow(L, 2.0) / 60
+			return r
+		}
+		
+		private fun getOnHingeFixedGrillage(
+			L: Double,
+			q_yi: Double,
+			q_yj: Double
+		): DoubleMatrix {
+			val r = DoubleMatrix(DOF_ELEM_PLANE_FRAME, 1)
+			r[1, 0] = -(11 * q_yi + 4 * q_yj) * L / 40
+			r[2, 0] = 0.0
+			r[4, 0] = -(9 * q_yi + 16 * q_yj) * L / 40
+			r[5, 0] = (7 * q_yi + 8 * q_yj) * pow(L, 2.0) / 120
+			return r
+		}
+		
+		private fun getOnFixedHingedGrillage(
+			L: Double,
+			q_yi: Double,
+			q_yj: Double
+		): DoubleMatrix {
+			val r = DoubleMatrix(DOF_ELEM_PLANE_FRAME, 1)
+			r[1, 0] = -(16 * q_yi + 9 * q_yj) * L / 40
+			r[2, 0] = -(8 * q_yi + 7 * q_yj) * pow(L, 2.0) / 120
+			r[4, 0] = -(4 * q_yi + 11 * q_yj) * L / 40
+			r[5, 0] = 0.0
+			return r
+		}
+		
+		private fun getOnHingedHingedGrillage(
+			L: Double,
+			q_yi: Double,
+			q_yj: Double
+		): DoubleMatrix {
+			val r = DoubleMatrix(DOF_ELEM_PLANE_FRAME, 1)
+			r[1, 0] = -(2 * q_yi + q_yj) * L / 6
+			r[2, 0] = 0.0
+			r[4, 0] = -(q_yi + 2 * q_yj) * L / 6
+			r[5, 0] = 0.0
+			return r
+		}
 	}
 	
 	fun getPlaneFrameSupportReaction(
@@ -138,9 +191,7 @@ class DistributedLoad(
 	fun getPlaneTrussSupportReaction(
 		L: Double,
 		sinA: Double,
-		cosA: Double,
-		hasHingeBegin: Boolean,
-		hasHingeEnd: Boolean
+		cosA: Double
 	): DoubleMatrix {
 		
 		if (isLocalLoad) {
@@ -154,5 +205,25 @@ class DistributedLoad(
 			return getOnHingedHingedPlaneTruss(L, q_xi, q_xj, q_yi, q_yj)
 			
 		}
+	}
+	
+	fun getGrillageSupportReaction(
+		L: Double,
+		hasHingeBegin: Boolean,
+		hasHingeEnd: Boolean
+	): DoubleMatrix {
+		if (qxi != 0.0 || qxj != 0.0) {
+			throw RuntimeException("Grillage structure do not support loads on X direction")
+		}
+		if (!hasHingeBegin && !hasHingeEnd)
+			return getOnFixedFixedGrillage(L, qyi, qyj)
+		else if (hasHingeBegin && !hasHingeEnd)
+			return getOnHingeFixedGrillage(L, qyi, qyj)
+		else if (!hasHingeBegin && hasHingeEnd)
+			return getOnFixedHingedGrillage(L, qyi, qyj)
+		else if (!hasHingeBegin && !hasHingeEnd)
+			return getOnHingedHingedGrillage(L, qyi, qyj)
+		
+		return DoubleMatrix(DOF_ELEM_GRILLAGE, 1)
 	}
 }
