@@ -1,6 +1,7 @@
 package elems
 
 import model.StructureModel
+import utils.StructureType
 import vsca.doublematrix.lib.DoubleMatrix
 import java.lang.Math.pow
 import java.lang.Math.sqrt
@@ -25,6 +26,8 @@ abstract class ElementAbs(
 	val mHasHingeBegin: Boolean = hasHingeBegin
 	val mHasHingeEnd: Boolean = hasHingeEnd
 	val mLoad: DistributedLoad?
+	
+	abstract fun getType(): StructureType
 	
 	init {
 		if (loadId != -1)
@@ -73,29 +76,26 @@ abstract class ElementAbs(
 	protected fun dy() = this.mNode_j.mY - this.mNode_i.mY
 	protected fun dz() = this.mNode_j.mZ - this.mNode_i.mZ
 	protected fun L(): Double {
-		if (dz() == 0.0)
-			return sqrt(pow(dx(), 2.0) + pow(dy(), 2.0))
-		else if (dy() == 0.0)
-			return sqrt(pow(dx(), 2.0) + pow(dz(), 2.0))
-		return Double.NaN
+		return if (getType() == StructureType.GRILLAGE)
+			sqrt(pow(dx(), 2.0) + pow(dz(), 2.0))
+		else
+			sqrt(pow(dx(), 2.0) + pow(dy(), 2.0))
 	}
 	
 	protected fun L2() = pow(L(), 2.0)
 	protected fun L3() = pow(L(), 3.0)
 	protected fun sinA(): Double {
-		if (dz() == 0.0)
-			return dy() / L()
-		else if (dy() == 0.0)
-			return dx() / L()
-		return Double.NaN
+		return if (getType() == StructureType.GRILLAGE)
+			dz() / L()
+		else
+			dy() / L()
 	}
 	
 	protected fun cosA(): Double {
-		if (dz() == 0.0)
-			return dx() / L()
-		else if (dy() == 0.0)
-			return dz() / L()
-		return Double.NaN
+		return if (getType() == StructureType.GRILLAGE)
+			dx() / L()
+		else
+			dx() / L()
 	}
 	
 	protected fun EIz() = this.mMaterial.mLongElasticityModulus * this.mSection.mInertiaMomentZ

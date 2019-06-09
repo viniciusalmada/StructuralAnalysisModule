@@ -4,6 +4,10 @@ enum class SupportCondition {
 	FREE, FIX, SPRING
 }
 
+enum class StructureType {
+	PLANE_FRAME, PLANE_TRUSS, GRILLAGE
+}
+
 const val ANALYSIS_PLANE_FRAME = "PLANE_FRAME"
 const val ANALYSIS_PLANE_TRUSS = "PLANE_TRUSS"
 const val ANALYSIS_GRILLAGE = "GRILLAGE"

@@ -3,11 +3,12 @@ package utils
 import vsca.doublematrix.lib.DoubleMatrix
 import java.util.*
 
-fun DoubleMatrix.showAsNodeDirections() {
+fun DoubleMatrix.showAsNodeDirections(title: String) {
     val out = StringBuilder()
 
     var init = 1
     var node = 1
+	println("------${title}------")
 	this.forEachRowColumn { i, _, value ->
         if (i != init) {
             out.append("[")

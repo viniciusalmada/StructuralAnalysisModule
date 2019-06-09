@@ -23,13 +23,13 @@ abstract class NodeAbs(
 		}
 	}
 	
-	abstract fun calculateStiffnessMatrix(degreeOfFreedom: Int): DoubleMatrix
-	
 	abstract fun calculateIncidenceMatrix(degreeOfFreedom: Int): DoubleMatrix
 	
 	abstract fun calculateLocalLoadVector(): DoubleMatrix
 	
 	abstract fun getDirections(): IntArray
+	
+	abstract fun getDirection(index: Int): Int
 	
 	fun calculateGlobalLoadVector(degreeOfFreedom: Int): DoubleMatrix {
 		val B = calculateIncidenceMatrix(degreeOfFreedom)

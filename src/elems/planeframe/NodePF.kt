@@ -9,23 +9,6 @@ import vsca.doublematrix.lib.DoubleMatrix
 class NodePF(id: Int, x: Double, y: Double, suppCondStrings: Array<String>, suppValues: DoubleArray) :
 	NodeAbs(id, x, y, 0.0, suppCondStrings, suppValues) {
 	
-	override fun calculateStiffnessMatrix(degreeOfFreedom: Int): DoubleMatrix {
-		val K = DoubleMatrix(degreeOfFreedom)
-		mSupportCondition.forEachIndexed { index, supportCondition ->
-			if (supportCondition == SupportCondition.SPRING) {
-				val k = mSupportValues[index]
-				val direction = when (index) {
-					0 -> DOF_NODE_PLANE_FRAME * mId - 2
-					1 -> DOF_NODE_PLANE_FRAME * mId - 1
-					2 -> DOF_NODE_PLANE_FRAME * mId
-					else -> INVALID_DIRECTION
-				}
-				K[direction - 1, direction - 1] += k
-			}
-		}
-		return K
-	}
-	
 	override fun calculateIncidenceMatrix(degreeOfFreedom: Int): DoubleMatrix {
 		val B = DoubleMatrix(DOF_NODE_PLANE_FRAME, degreeOfFreedom)
 		val e = getDirections()
@@ -51,5 +34,12 @@ class NodePF(id: Int, x: Double, y: Double, suppCondStrings: Array<String>, supp
 			DOF_NODE_PLANE_FRAME * mId - 1,
 			DOF_NODE_PLANE_FRAME * mId
 		)
+	}
+	
+	override fun getDirection(index: Int): Int = when (index) {
+		0 -> DOF_NODE_PLANE_FRAME * mId - 2
+		1 -> DOF_NODE_PLANE_FRAME * mId - 1
+		2 -> DOF_NODE_PLANE_FRAME * mId
+		else -> INVALID_DIRECTION
 	}
 }

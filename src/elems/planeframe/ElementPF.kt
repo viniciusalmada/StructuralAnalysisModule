@@ -4,6 +4,7 @@ import elems.ElementAbs
 import model.StructureModel
 import utils.DOF_ELEM_PLANE_FRAME
 import utils.DOF_NODE_PLANE_FRAME
+import utils.StructureType
 import vsca.doublematrix.lib.DoubleMatrix
 
 class ElementPF(
@@ -122,5 +123,7 @@ class ElementPF(
 		r = mLoad.getPlaneFrameSupportReaction(L(), sinA(), cosA(), mHasHingeBegin, mHasHingeEnd)
 		return r * -1.0
 	}
+	
+	override fun getType(): StructureType = StructureType.PLANE_FRAME
 	
 }

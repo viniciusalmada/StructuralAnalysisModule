@@ -1,9 +1,6 @@
 package model
 
 import analysis.Analysis
-import analysis.AnalysisGrillage
-import analysis.AnalysisPlaneFrame
-import analysis.AnalysisPlaneTruss
 import com.google.gson.Gson
 import elems.*
 import elems.grillage.ElementG
@@ -12,9 +9,7 @@ import elems.planeframe.ElementPF
 import elems.planeframe.NodePF
 import elems.planetruss.ElementPT
 import elems.planetruss.NodePT
-import utils.ANALYSIS_GRILLAGE
-import utils.ANALYSIS_PLANE_FRAME
-import utils.ANALYSIS_PLANE_TRUSS
+import utils.*
 import java.io.File
 import java.io.FileReader
 
@@ -32,17 +27,17 @@ class StructureModel(file: File) {
 		when (dataModel.analysis) {
 			ANALYSIS_PLANE_FRAME -> {
 				loadPFModel(dataModel)
-				mAnalisysType = AnalysisPlaneFrame(this)
+				mAnalisysType = Analysis(this, DOF_NODE_PLANE_FRAME)
 			}
 			ANALYSIS_PLANE_TRUSS -> {
 				loadPTModel(dataModel)
-				mAnalisysType = AnalysisPlaneTruss(this)
+				mAnalisysType = Analysis(this, DOF_NODE_PLANE_TRUSS)
 			}
 			ANALYSIS_GRILLAGE -> {
 				loadGModel(dataModel)
-				mAnalisysType = AnalysisGrillage(this)
+				mAnalisysType = Analysis(this, DOF_NODE_GRILLAGE)
 			}
-			else -> mAnalisysType = AnalysisPlaneTruss(this)
+			else -> mAnalisysType = Analysis(this, 0)
 		}
 		val res = mAnalisysType.doAnalysis()
 		val gson = Gson()

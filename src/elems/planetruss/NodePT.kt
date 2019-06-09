@@ -9,22 +9,6 @@ import vsca.doublematrix.lib.DoubleMatrix
 class NodePT(id: Int, x: Double, y: Double, suppCondStrings: Array<String>, mSupportValues: DoubleArray) :
 	NodeAbs(id, x, y, 0.0, suppCondStrings, mSupportValues) {
 	
-	override fun calculateStiffnessMatrix(degreeOfFreedom: Int): DoubleMatrix {
-		val K = DoubleMatrix(degreeOfFreedom)
-		mSupportCondition.forEachIndexed { index, supportCondition ->
-			if (supportCondition == SupportCondition.SPRING) {
-				val k = mSupportValues[index]
-				val direction = when (index) {
-					0 -> DOF_NODE_PLANE_TRUSS * mId - 1
-					1 -> DOF_NODE_PLANE_TRUSS * mId
-					else -> INVALID_DIRECTION
-				}
-				K[direction - 1, direction - 1] += k
-			}
-		}
-		return K
-	}
-	
 	override fun calculateIncidenceMatrix(degreeOfFreedom: Int): DoubleMatrix {
 		val B = DoubleMatrix(DOF_NODE_PLANE_TRUSS, degreeOfFreedom)
 		val e = getDirections()
@@ -49,5 +33,11 @@ class NodePT(id: Int, x: Double, y: Double, suppCondStrings: Array<String>, mSup
 			DOF_NODE_PLANE_TRUSS * mId - 1,
 			DOF_NODE_PLANE_TRUSS * mId
 		)
+	}
+	
+	override fun getDirection(index: Int): Int = when (index) {
+		0 -> DOF_NODE_PLANE_TRUSS * mId - 1
+		1 -> DOF_NODE_PLANE_TRUSS * mId
+		else -> INVALID_DIRECTION
 	}
 }

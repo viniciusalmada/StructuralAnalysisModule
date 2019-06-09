@@ -4,6 +4,7 @@ import elems.ElementAbs
 import model.StructureModel
 import utils.DOF_ELEM_GRILLAGE
 import utils.DOF_NODE_GRILLAGE
+import utils.StructureType
 import vsca.doublematrix.lib.DoubleMatrix
 
 class ElementG(
@@ -37,41 +38,41 @@ class ElementG(
 	
 	override fun calculateLocalStiffnessMatrixOnLocalSystem(): DoubleMatrix {
 		var k_ = DoubleMatrix(DOF_ELEM_GRILLAGE)
-		k_[0, 0] = GJ() / L()
-		k_[0, 3] = -GJ() / L()
-		
-		k_[1, 1] = 12 * EIz() / L3()
-		k_[1, 2] = 6 * EIz() / L2()
-		k_[1, 4] = -12 * EIz() / L3()
-		k_[1, 5] = 6 * EIz() / L2()
-		
-		k_[2, 1] = 6 * EIz() / L2()
-		k_[2, 2] = 4 * EIz() / L()
-		k_[2, 4] = -6 * EIz() / L2()
-		k_[2, 5] = 2 * EIz() / L()
-		
-		k_[3, 0] = -GJ() / L()
-		k_[3, 3] = GJ() / L()
-		
-		k_[4, 1] = -12 * EIz() / L3()
-		k_[4, 2] = -6 * EIz() / L2()
-		k_[4, 4] = 12 * EIz() / L3()
-		k_[4, 5] = -6 * EIz() / L2()
-		
-		k_[5, 1] = 6 * EIz() / L2()
-		k_[5, 2] = 2 * EIz() / L()
-		k_[5, 4] = -6 * EIz() / L2()
-		k_[5, 5] = 4 * EIz() / L()
-		
-		if (mHasHingeBegin && !mHasHingeEnd) {
-			k_ = DoubleMatrix(DOF_ELEM_GRILLAGE)
+		if (!mHasHingeBegin && !mHasHingeEnd) {
 			k_[0, 0] = GJ() / L()
 			k_[0, 3] = -GJ() / L()
+			
+			k_[1, 1] = 12 * EIz() / L3()
+			k_[1, 2] = 6 * EIz() / L2()
+			k_[1, 4] = -12 * EIz() / L3()
+			k_[1, 5] = 6 * EIz() / L2()
+			
+			k_[2, 1] = 6 * EIz() / L2()
+			k_[2, 2] = 4 * EIz() / L()
+			k_[2, 4] = -6 * EIz() / L2()
+			k_[2, 5] = 2 * EIz() / L()
+			
+			k_[3, 0] = -GJ() / L()
+			k_[3, 3] = GJ() / L()
+			
+			k_[4, 1] = -12 * EIz() / L3()
+			k_[4, 2] = -6 * EIz() / L2()
+			k_[4, 4] = 12 * EIz() / L3()
+			k_[4, 5] = -6 * EIz() / L2()
+			
+			k_[5, 1] = 6 * EIz() / L2()
+			k_[5, 2] = 2 * EIz() / L()
+			k_[5, 4] = -6 * EIz() / L2()
+			k_[5, 5] = 4 * EIz() / L()
+		} else if (mHasHingeBegin && !mHasHingeEnd) {
+			k_ = DoubleMatrix(DOF_ELEM_GRILLAGE)
+			/*k_[0, 0] = GJ() / L()
+			k_[0, 3] = -GJ() / L()*/
 			k_[1, 1] = 3 * EIz() / L3()
 			k_[1, 4] = -3 * EIz() / L3()
 			k_[1, 5] = 3 * EIz() / L2()
-			k_[3, 0] = -GJ() / L()
-			k_[3, 3] = GJ() / L()
+			/*k_[3, 0] = -GJ() / L()
+			k_[3, 3] = GJ() / L()*/
 			k_[4, 1] = -3 * EIz() / L3()
 			k_[4, 4] = 3 * EIz() / L3()
 			k_[4, 5] = -3 * EIz() / L2()
@@ -80,25 +81,25 @@ class ElementG(
 			k_[5, 5] = 3 * EIz() / L()
 		} else if (!mHasHingeBegin && mHasHingeEnd) {
 			k_ = DoubleMatrix(DOF_ELEM_GRILLAGE)
-			k_[0, 0] = GJ() / L()
-			k_[0, 3] = -GJ() / L()
+			/*k_[0, 0] = GJ() / L()
+			k_[0, 3] = -GJ() / L()*/
 			k_[1, 1] = 3 * EIz() / L3()
 			k_[1, 2] = 3 * EIz() / L2()
 			k_[1, 4] = -3 * EIz() / L3()
 			k_[2, 1] = 3 * EIz() / L2()
 			k_[2, 2] = 3 * EIz() / L()
 			k_[2, 4] = -3 * EIz() / L2()
-			k_[3, 0] = -GJ() / L()
-			k_[3, 3] = GJ() / L()
+			/*k_[3, 0] = -GJ() / L()
+			k_[3, 3] = GJ() / L()*/
 			k_[4, 1] = -3 * EIz() / L3()
 			k_[4, 2] = -3 * EIz() / L2()
 			k_[4, 4] = 3 * EIz() / L3()
 		} else if (mHasHingeBegin && mHasHingeEnd) {
 			k_ = DoubleMatrix(DOF_ELEM_GRILLAGE)
-			k_[0, 0] = GJ() / L()
+			/*k_[0, 0] = GJ() / L()
 			k_[0, 3] = -GJ() / L()
 			k_[3, 0] = -GJ() / L()
-			k_[3, 3] = GJ() / L()
+			k_[3, 3] = GJ() / L()*/
 		}
 		
 		return k_
@@ -107,14 +108,14 @@ class ElementG(
 	override fun calculateRotationMatrix(): DoubleMatrix {
 		val R = DoubleMatrix(DOF_ELEM_GRILLAGE)
 		R[0, 0] = cosA()
-		R[0, 2] = sinA()
+		R[0, 2] = -sinA()
 		R[1, 1] = 1.0
-		R[2, 0] = -sinA()
+		R[2, 0] = sinA()
 		R[2, 2] = cosA()
 		R[3, 3] = cosA()
-		R[3, 5] = sinA()
+		R[3, 5] = -sinA()
 		R[4, 4] = 1.0
-		R[5, 3] = -sinA()
+		R[5, 3] = sinA()
 		R[5, 5] = cosA()
 		
 		return R
@@ -127,5 +128,7 @@ class ElementG(
 		r = mLoad.getGrillageSupportReaction(L(), mHasHingeBegin, mHasHingeEnd)
 		return r * -1.0
 	}
+	
+	override fun getType(): StructureType = StructureType.GRILLAGE
 	
 }

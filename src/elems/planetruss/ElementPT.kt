@@ -4,6 +4,7 @@ import elems.ElementAbs
 import model.StructureModel
 import utils.DOF_ELEM_PLANE_TRUSS
 import utils.DOF_NODE_PLANE_TRUSS
+import utils.StructureType
 import vsca.doublematrix.lib.DoubleMatrix
 
 class ElementPT(
@@ -62,5 +63,7 @@ class ElementPT(
 		r = mLoad.getPlaneTrussSupportReaction(L(), sinA(), cosA())
 		return r * -1.0
 	}
+	
+	override fun getType(): StructureType = StructureType.PLANE_TRUSS
 	
 }
