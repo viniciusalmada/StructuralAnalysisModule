@@ -4,3 +4,5 @@
 *.xlsx
 *.docx
 *lixo.json
+/out
+/lib
