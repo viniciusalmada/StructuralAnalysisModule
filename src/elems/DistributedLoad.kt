@@ -1,5 +1,6 @@
 package elems
 
+import utils.DOF_ELEM_BEAM
 import utils.DOF_ELEM_GRILLAGE
 import utils.DOF_ELEM_PLANE_FRAME
 import utils.DOF_ELEM_PLANE_TRUSS
@@ -150,6 +151,33 @@ class DistributedLoad(
 			r[5, 0] = 0.0
 			return r
 		}
+		
+		private fun getOnFixedFixedBeam(L: Double, q_yi: Double, q_yj: Double): DoubleMatrix {
+			val r = DoubleMatrix(DOF_ELEM_BEAM, 1)
+			r[0, 0] = -(7 * q_yi + 3 * q_yj) * L / 20
+			r[1, 0] = -(3 * q_yi + 2 * q_yj) * pow(L, 2.0) / 60
+			r[2, 0] = -(3 * q_yi + 7 * q_yj) * L / 20
+			r[3, 0] = (2 * q_yi + 3 * q_yj) * pow(L, 2.0) / 60
+			return r
+		}
+		
+		private fun getOnHingeFixedBeam(L: Double, q_yi: Double, q_yj: Double): DoubleMatrix {
+			val r = DoubleMatrix(DOF_ELEM_BEAM, 1)
+			r[0, 0] = -(11 * q_yi + 4 * q_yj) * L / 40
+			r[1, 0] = 0.0
+			r[2, 0] = -(9 * q_yi + 16 * q_yj) * L / 40
+			r[3, 0] = (7 * q_yi + 8 * q_yj) * pow(L, 2.0) / 120
+			return r
+		}
+		
+		private fun getOnFixedHingedBeam(L: Double, q_yi: Double, q_yj: Double): DoubleMatrix {
+			val r = DoubleMatrix(DOF_ELEM_BEAM, 1)
+			r[0, 0] = -(16 * q_yi + 9 * q_yj) * L / 40
+			r[1, 0] = -(8 * q_yi + 7 * q_yj) * pow(L, 2.0) / 120
+			r[2, 0] = -(4 * q_yi + 11 * q_yj) * L / 40
+			r[3, 0] = 0.0
+			return r
+		}
 	}
 	
 	fun getPlaneFrameSupportReaction(
@@ -225,5 +253,20 @@ class DistributedLoad(
 			return getOnHingedHingedGrillage(L, qyi, qyj)
 		
 		return DoubleMatrix(DOF_ELEM_GRILLAGE, 1)
+	}
+	
+	fun getBeamSupportReaction(L: Double, hasHingeBegin: Boolean, hasHingeEnd: Boolean): DoubleMatrix {
+		if (qxi != 0.0 || qxj != 0.0) {
+			throw RuntimeException("Beams structure do not support loads on X direction")
+		}
+		if (!hasHingeBegin && !hasHingeEnd) {
+			return getOnFixedFixedBeam(L, qyi, qyj)
+		} else if (hasHingeBegin && !hasHingeEnd) {
+			return getOnHingeFixedBeam(L, qyi, qyj)
+		} else if (!hasHingeBegin && hasHingeEnd) {
+			return getOnFixedHingedBeam(L, qyi, qyj)
+		}
+		
+		return DoubleMatrix(DOF_ELEM_BEAM, 1)
 	}
 }

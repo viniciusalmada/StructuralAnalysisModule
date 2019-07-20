@@ -3,6 +3,8 @@ package model
 import analysis.Analysis
 import com.google.gson.Gson
 import elems.*
+import elems.beam.ElementB
+import elems.beam.NodeB
 import elems.grillage.ElementG
 import elems.grillage.NodeG
 import elems.planeframe.ElementPF
@@ -36,6 +38,10 @@ class StructureModel(file: File) {
 			ANALYSIS_GRILLAGE -> {
 				loadGModel(dataModel)
 				mAnalisysType = Analysis(this, DOF_NODE_GRILLAGE)
+			}
+			ANALYSIS_BEAM -> {
+				loadBModel(dataModel)
+				mAnalisysType = Analysis(this, DOF_NODE_BEAM)
 			}
 			else -> mAnalisysType = Analysis(this, 0)
 		}
@@ -147,6 +153,43 @@ class StructureModel(file: File) {
 				e.nodeId_j,
 				e.materialId,
 				e.sectionId,
+				e.loadId,
+				this
+			)
+			mElements.add(elem)
+		}
+	}
+	
+	private fun loadBModel(dataModel: StructureDataModel) {
+		for (n in dataModel.nodes) {
+			val node = NodeB(n.id, n.x, n.suppCond, n.suppValues)
+			mNodes.add(node)
+		}
+		
+		for (m in dataModel.materials) {
+			val material = Material(m.id, m.longElastModulus, m.poissonRatio, m.transElastModulus)
+			mMaterials.add(material)
+		}
+		
+		for (s in dataModel.sections) {
+			val section = Section(s.id, s.area, s.inertiaMomentZ, s.inertiaMomentY)
+			mSections.add(section)
+		}
+		
+		for (dl in dataModel.distributedLoads) {
+			val loads = DistributedLoad(dl.id, dl.qxi, dl.qxj, dl.qyi, dl.qyj, dl.isLocalLoad)
+			mDistributedLoads.add(loads)
+		}
+		
+		for (e in dataModel.elements) {
+			val elem = ElementB(
+				e.id,
+				e.nodeId_i,
+				e.nodeId_j,
+				e.materialId,
+				e.sectionId,
+				e.hasHingedBegin,
+				e.hasHingedEnd,
 				e.loadId,
 				this
 			)
