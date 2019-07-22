@@ -1,0 +1,57 @@
+{
+	"analysis": "BEAM",
+	"nodes": [
+		{
+			"id": 1,
+			"x": 0.0,
+			"suppCond": ["FIX", "FIX"],
+			"suppValues": [0.0, 0.0, 0.0]
+		}, {
+			"id": 2,
+			"x": 4.0,
+			"suppCond": ["SPRING", "FREE"],
+			"suppValues": [80000.0, 0.0]
+		}, {
+			"id": 3,
+			"x": 6.0,
+			"suppCond": ["FIX", "FREE"],
+			"suppValues": [0.0, 200.0]
+		}
+	],
+	"materials": [
+		{
+			"id": 1,
+			"longElastModulus": 2e8,
+			"poissonRatio": 0.2
+		}
+	],
+	"sections": [
+		{
+			"id": 1,
+			"area": 0.008,
+			"inertiaMomentZ": 0.0004
+		}
+	],
+	"distributedLoads": [ ],
+	"elements": [
+		{
+			"id": 1,
+			"nodeId_i": 1,
+			"nodeId_j": 2,
+			"materialId": 1,
+			"sectionId": 1,
+			"hasHingedBegin": false,
+			"hasHingedEnd": false,
+			"loadId": -1
+		}, {
+			"id": 2,
+			"nodeId_i": 2,
+			"nodeId_j": 3,
+			"materialId": 1,
+			"sectionId": 1,
+			"hasHingedBegin": false,
+			"hasHingedEnd": false,
+			"loadId": -1
+		}
+	]
+}

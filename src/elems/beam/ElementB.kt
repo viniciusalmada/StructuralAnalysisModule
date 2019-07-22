@@ -36,36 +36,28 @@ class ElementB(
 	
 	override fun calculateLocalStiffnessMatrixOnLocalSystem(): DoubleMatrix {
 		var k_ = DoubleMatrix(DOF_ELEM_BEAM)
-//		k_[0, 0] = EA() / L()
-//		k_[0, 3] = -EA() / L()
-		k_[0, 0] = 12 * EIz() / L3()
-		k_[0, 1] = 6 * EIz() / L2()
-		k_[0, 2] = -12 * EIz() / L3()
-		k_[0, 3] = 6 * EIz() / L2()
-		k_[1, 0] = 6 * EIz() / L2()
-		k_[1, 1] = 4 * EIz() / L()
-		k_[1, 2] = -6 * EIz() / L2()
-		k_[1, 3] = 2 * EIz() / L()
-//		k_[3, 0] = -EA() / L()
-//		k_[3, 3] = EA() / L()
-		k_[2, 0] = -12 * EIz() / L3()
-		k_[2, 1] = -6 * EIz() / L2()
-		k_[2, 2] = 12 * EIz() / L3()
-		k_[2, 3] = -6 * EIz() / L2()
-		k_[3, 0] = 6 * EIz() / L2()
-		k_[3, 1] = 2 * EIz() / L()
-		k_[3, 2] = -6 * EIz() / L2()
-		k_[3, 3] = 4 * EIz() / L()
-		
-		if (mHasHingeBegin && !mHasHingeEnd) {
+		if (!mHasHingeBegin && !mHasHingeEnd){
+			k_[0, 0] = 12 * EIz() / L3()
+			k_[0, 1] = 6 * EIz() / L2()
+			k_[0, 2] = -12 * EIz() / L3()
+			k_[0, 3] = 6 * EIz() / L2()
+			k_[1, 0] = 6 * EIz() / L2()
+			k_[1, 1] = 4 * EIz() / L()
+			k_[1, 2] = -6 * EIz() / L2()
+			k_[1, 3] = 2 * EIz() / L()
+			k_[2, 0] = -12 * EIz() / L3()
+			k_[2, 1] = -6 * EIz() / L2()
+			k_[2, 2] = 12 * EIz() / L3()
+			k_[2, 3] = -6 * EIz() / L2()
+			k_[3, 0] = 6 * EIz() / L2()
+			k_[3, 1] = 2 * EIz() / L()
+			k_[3, 2] = -6 * EIz() / L2()
+			k_[3, 3] = 4 * EIz() / L()
+		} else if (mHasHingeBegin && !mHasHingeEnd) {
 			k_ = DoubleMatrix(DOF_ELEM_BEAM)
-//			k_[0, 0] = EA() / L()
-//			k_[0, 3] = -EA() / L()
 			k_[0, 0] = 3 * EIz() / L3()
 			k_[0, 2] = -3 * EIz() / L3()
 			k_[0, 3] = 3 * EIz() / L2()
-//			k_[3, 0] = -EA() / L()
-//			k_[3, 3] = EA() / L()
 			k_[2, 0] = -3 * EIz() / L3()
 			k_[2, 2] = 3 * EIz() / L3()
 			k_[2, 3] = -3 * EIz() / L2()
@@ -74,44 +66,24 @@ class ElementB(
 			k_[3, 3] = 3 * EIz() / L()
 		} else if (!mHasHingeBegin && mHasHingeEnd) {
 			k_ = DoubleMatrix(DOF_ELEM_BEAM)
-//			k_[0, 0] = EA() / L()
-//			k_[0, 3] = -EA() / L()
 			k_[0, 0] = 3 * EIz() / L3()
 			k_[0, 1] = 3 * EIz() / L2()
 			k_[0, 2] = -3 * EIz() / L3()
 			k_[1, 0] = 3 * EIz() / L2()
 			k_[1, 1] = 3 * EIz() / L()
 			k_[1, 2] = -3 * EIz() / L2()
-//			k_[3, 0] = -EA() / L()
-//			k_[3, 1] = EA() / L()
 			k_[2, 0] = -3 * EIz() / L3()
 			k_[2, 1] = -3 * EIz() / L2()
 			k_[2, 2] = 3 * EIz() / L3()
 		} else if (mHasHingeBegin && mHasHingeEnd) {
 			k_ = DoubleMatrix(DOF_ELEM_BEAM)
-//			k_[0, 0] = EA() / L()
-//			k_[0, 3] = -EA() / L()
-//			k_[3, 0] = -EA() / L()
-//			k_[3, 3] = EA() / L()
 		}
 		
 		return k_
 	}
 	
 	override fun calculateRotationMatrix(): DoubleMatrix {
-		val R = DoubleMatrix.eye(DOF_ELEM_BEAM)
-//		R[0, 0] = cosA()
-//		R[0, 1] = sinA()
-//		R[1, 0] = -sinA()
-//		R[1, 1] = cosA()
-//		R[2, 2] = 1.0
-//		R[3, 3] = cosA()
-//		R[3, 4] = sinA()
-//		R[4, 3] = -sinA()
-//		R[4, 4] = cosA()
-//		R[5, 5] = 1.0
-		
-		return R
+		return DoubleMatrix.eye(DOF_ELEM_BEAM)
 	}
 	
 	override fun calculateLocalLoadVectorOnLocalSystem(): DoubleMatrix {
