@@ -5,17 +5,20 @@
 			"id": 1,
 			"x": 0.0,
 			"suppCond": ["FIX", "FIX"],
-			"suppValues": [0.0, 0.0, 0.0]
+			"loadValues": [0.0, 0.0],
+			"stiffValues": [0.0, 0.0]
 		}, {
 			"id": 2,
 			"x": 4.0,
 			"suppCond": ["SPRING", "FREE"],
-			"suppValues": [80000.0, 0.0]
+			"loadValues": [0.0, 0.0],
+			"stiffValues": [80000.0, 0.0]
 		}, {
 			"id": 3,
 			"x": 6.0,
 			"suppCond": ["FIX", "FREE"],
-			"suppValues": [0.0, 200.0]
+			"loadValues": [0.0, 200.0],
+			"stiffValues": [0.0, 0.0]
 		}
 	],
 	"materials": [
@@ -32,7 +35,7 @@
 			"inertiaMomentZ": 0.0004
 		}
 	],
-	"distributedLoads": [ ],
+	"distributedLoads": [],
 	"elements": [
 		{
 			"id": 1,

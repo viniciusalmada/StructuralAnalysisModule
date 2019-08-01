@@ -6,8 +6,8 @@ import utils.INVALID_DIRECTION
 import utils.SupportCondition
 import vsca.doublematrix.lib.DoubleMatrix
 
-class NodePT(id: Int, x: Double, y: Double, suppCondStrings: Array<String>, mSupportValues: DoubleArray) :
-	NodeAbs(id, x, y, 0.0, suppCondStrings, mSupportValues) {
+class NodePT(id: Int, x: Double, y: Double, suppCondStrings: Array<String>, loadValues: DoubleArray, stiffValues: DoubleArray) :
+		NodeAbs(id, x, y, 0.0, suppCondStrings, loadValues, stiffValues) {
 	
 	override fun calculateIncidenceMatrix(degreeOfFreedom: Int): DoubleMatrix {
 		val B = DoubleMatrix(DOF_NODE_PLANE_TRUSS, degreeOfFreedom)
@@ -21,8 +21,8 @@ class NodePT(id: Int, x: Double, y: Double, suppCondStrings: Array<String>, mSup
 	override fun calculateLocalLoadVector(): DoubleMatrix {
 		val f = DoubleMatrix(DOF_NODE_PLANE_TRUSS, 1)
 		mSupportCondition.forEachIndexed { index, supportCondition ->
-			if (supportCondition == SupportCondition.FREE && mSupportValues[index] != 0.0) {
-				f[index, 0] = mSupportValues[index]
+			if (supportCondition == SupportCondition.FREE && mLoadValues[index] != 0.0) {
+				f[index, 0] = mLoadValues[index]
 			}
 		}
 		return f

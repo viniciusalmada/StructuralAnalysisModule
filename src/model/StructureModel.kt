@@ -2,7 +2,11 @@ package model
 
 import analysis.Analysis
 import com.google.gson.Gson
-import elems.*
+import elems.DistributedLoad
+import elems.ElementAbs
+import elems.Material
+import elems.NodeAbs
+import elems.Section
 import elems.beam.ElementB
 import elems.beam.NodeB
 import elems.grillage.ElementG
@@ -11,7 +15,14 @@ import elems.planeframe.ElementPF
 import elems.planeframe.NodePF
 import elems.planetruss.ElementPT
 import elems.planetruss.NodePT
-import utils.*
+import utils.ANALYSIS_BEAM
+import utils.ANALYSIS_GRILLAGE
+import utils.ANALYSIS_PLANE_FRAME
+import utils.ANALYSIS_PLANE_TRUSS
+import utils.DOF_NODE_BEAM
+import utils.DOF_NODE_GRILLAGE
+import utils.DOF_NODE_PLANE_FRAME
+import utils.DOF_NODE_PLANE_TRUSS
 import java.io.File
 import java.io.FileReader
 
@@ -21,7 +32,7 @@ class StructureModel(file: File) {
 	val mMaterials = HashSet<Material>()
 	val mSections = HashSet<Section>()
 	val mDistributedLoads = HashSet<DistributedLoad>()
-	val mAnalisysType: Analysis
+	private val mAnalysisType: Analysis
 	
 	init {
 		val dataModel = Gson().fromJson(FileReader(file), StructureDataModel::class.java)
@@ -29,23 +40,23 @@ class StructureModel(file: File) {
 		when (dataModel.analysis) {
 			ANALYSIS_PLANE_FRAME -> {
 				loadPFModel(dataModel)
-				mAnalisysType = Analysis(this, DOF_NODE_PLANE_FRAME)
+				mAnalysisType = Analysis(this, DOF_NODE_PLANE_FRAME)
 			}
 			ANALYSIS_PLANE_TRUSS -> {
 				loadPTModel(dataModel)
-				mAnalisysType = Analysis(this, DOF_NODE_PLANE_TRUSS)
+				mAnalysisType = Analysis(this, DOF_NODE_PLANE_TRUSS)
 			}
 			ANALYSIS_GRILLAGE -> {
 				loadGModel(dataModel)
-				mAnalisysType = Analysis(this, DOF_NODE_GRILLAGE)
+				mAnalysisType = Analysis(this, DOF_NODE_GRILLAGE)
 			}
 			ANALYSIS_BEAM -> {
 				loadBModel(dataModel)
-				mAnalisysType = Analysis(this, DOF_NODE_BEAM)
+				mAnalysisType = Analysis(this, DOF_NODE_BEAM)
 			}
-			else -> mAnalisysType = Analysis(this, 0)
+			else -> mAnalysisType = Analysis(this, 0)
 		}
-		val res = mAnalisysType.doAnalysis()
+		val res = mAnalysisType.doAnalysis()
 		val gson = Gson()
 		val str = gson.toJson(res)
 		println(str)
@@ -53,7 +64,7 @@ class StructureModel(file: File) {
 	
 	private fun loadPFModel(dataModel: StructureDataModel) {
 		for (n in dataModel.nodes) {
-			val node = NodePF(n.id, n.x, n.y, n.suppCond, n.suppValues)
+			val node = NodePF(n.id, n.x, n.y, n.suppCond, n.loadValues, n.stiffValues)
 			mNodes.add(node)
 		}
 		
@@ -90,7 +101,7 @@ class StructureModel(file: File) {
 	
 	private fun loadGModel(dataModel: StructureDataModel) {
 		for (n in dataModel.nodes) {
-			val node = NodeG(n.id, n.z, n.x, n.suppCond, n.suppValues)
+			val node = NodeG(n.id, n.z, n.x, n.suppCond, n.loadValues, n.stiffValues)
 			mNodes.add(node)
 		}
 		
@@ -127,7 +138,7 @@ class StructureModel(file: File) {
 	
 	private fun loadPTModel(dataModel: StructureDataModel) {
 		for (n in dataModel.nodes) {
-			val node = NodePT(n.id, n.x, n.y, n.suppCond, n.suppValues)
+			val node = NodePT(n.id, n.x, n.y, n.suppCond, n.loadValues, n.stiffValues)
 			mNodes.add(node)
 		}
 		
@@ -162,7 +173,7 @@ class StructureModel(file: File) {
 	
 	private fun loadBModel(dataModel: StructureDataModel) {
 		for (n in dataModel.nodes) {
-			val node = NodeB(n.id, n.x, n.suppCond, n.suppValues)
+			val node = NodeB(n.id, n.x, n.suppCond, n.loadValues, n.stiffValues)
 			mNodes.add(node)
 		}
 		

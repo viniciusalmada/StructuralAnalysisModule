@@ -4,12 +4,13 @@ import utils.SupportCondition
 import vsca.doublematrix.lib.DoubleMatrix
 
 abstract class NodeAbs(
-	val mId: Int,
-	val mX: Double,
-	val mY: Double,
-	val mZ: Double,
-	suppCondStrings: Array<String>,
-	val mSupportValues: DoubleArray
+		val mId: Int,
+		val mCoordX: Double,
+		val mCoordY: Double,
+		val mCoordZ: Double,
+		suppCondStrings: Array<String>,
+		val mLoadValues: DoubleArray,
+		val mStiffValues: DoubleArray
 ) {
 	val mSupportCondition = ArrayList<SupportCondition>()
 	
@@ -45,5 +46,4 @@ abstract class NodeAbs(
 	override fun equals(other: Any?): Boolean {
 		return this.mId == (other as NodeAbs).mId
 	}
-	
 }

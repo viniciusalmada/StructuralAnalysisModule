@@ -71,10 +71,10 @@ abstract class ElementAbs(
 		val f = R.transpose() * f_
 		return f
 	}
-	
-	protected fun dx() = this.mNode_j.mX - this.mNode_i.mX
-	protected fun dy() = this.mNode_j.mY - this.mNode_i.mY
-	protected fun dz() = this.mNode_j.mZ - this.mNode_i.mZ
+
+	protected fun dx() = this.mNode_j.mCoordX - this.mNode_i.mCoordX
+	protected fun dy() = this.mNode_j.mCoordY - this.mNode_i.mCoordY
+	protected fun dz() = this.mNode_j.mCoordZ - this.mNode_i.mCoordZ
 	protected fun L(): Double {
 		return if (getType() == StructureType.GRILLAGE)
 			sqrt(pow(dx(), 2.0) + pow(dz(), 2.0))

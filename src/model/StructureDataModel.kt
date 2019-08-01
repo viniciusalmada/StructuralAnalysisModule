@@ -10,12 +10,13 @@ data class StructureDataModel(
 ) {
 	
 	data class NodeData(
-		val id: Int,
-		val x: Double,
-		val y: Double,
-		val z: Double,
-		val suppCond: Array<String>,
-		val suppValues: DoubleArray
+			val id: Int,
+			val x: Double,
+			val y: Double,
+			val z: Double,
+			val suppCond: Array<String>,
+			val loadValues: DoubleArray,
+			val stiffValues: DoubleArray
 	)
 	
 	data class MaterialData(

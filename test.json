@@ -6,37 +6,43 @@
 			"x": 0.0,
 			"y": 0.0,
 			"suppCond": ["FIX", "FIX", "FIX"],
-			"suppValues": [0.0, 0.0, 0.0]
+			"loadValues": [0.0, 0.0, 0.0],
+			"stiffValues": [0.0, 0.0, 0.0]
 		}, {
 			"id": 2,
 			"x": 12.0,
 			"y": 0.0,
 			"suppCond": ["FIX", "FIX", "SPRING"],
-			"suppValues": [0.0, 0.0, 80000.0]
+			"loadValues": [0.0, 0.0, 0.0],
+			"stiffValues": [0.0, 0.0, 80000.0]
 		}, {
 			"id": 3,
 			"x": 0.0,
 			"y": 2.0,
 			"suppCond": ["FREE", "FREE", "FREE"],
-			"suppValues": [20.0, 0.0, 0.0]
+			"loadValues": [20.0, 0.0, 0.0],
+			"stiffValues": [0.0, 0.0, 0.0]
 		}, {
 			"id": 4,
 			"x": 0.0,
 			"y": 6.0,
 			"suppCond": ["FREE", "FREE", "FREE"],
-			"suppValues": [20.0, 0.0, 0.0]
+			"loadValues": [20.0, 0.0, 0.0],
+			"stiffValues": [0.0, 0.0, 0.0]
 		}, {
 			"id": 5,
 			"x": 12.0,
 			"y": 7.0,
 			"suppCond": ["FREE", "FREE", "FREE"],
-			"suppValues": [0.0, 0.0, 0.0]
+			"loadValues": [0.0, 0.0, 0.0],
+			"stiffValues": [0.0, 0.0, 0.0]
 		}, {
 			"id": 6,
 			"x": 12.0,
 			"y": 11.0,
 			"suppCond": ["FREE", "FREE", "FREE"],
-			"suppValues": [0.0, 0.0, 0.0]
+			"loadValues": [0.0, 0.0, 0.0],
+			"stiffValues": [0.0, 0.0, 0.0]
 		}
 	],
 	"materials": [

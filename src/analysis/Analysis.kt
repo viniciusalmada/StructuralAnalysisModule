@@ -38,7 +38,7 @@ class Analysis(protected val mModel: StructureModel, private val mDOFByNode: Int
 			it.mSupportCondition.forEachIndexed { index, suppCond ->
 				if (suppCond == SupportCondition.SPRING) {
 					val direction = it.getDirection(index)
-					K[direction - 1, direction - 1] += it.mSupportValues[index]
+					K[direction - 1, direction - 1] += it.mStiffValues[index]
 				}
 			}
 		}
@@ -53,7 +53,7 @@ class Analysis(protected val mModel: StructureModel, private val mDOFByNode: Int
 	 * @param K - global stiffness matrix (original)
 	 * @return stiffness matrix with boundary conditions
 	 */
-	fun calculateStiffnessMatrixBoundaryCondition(K: DoubleMatrix): DoubleMatrix {
+	private fun calculateStiffnessMatrixBoundaryCondition(K: DoubleMatrix): DoubleMatrix {
 		val Kb = K.copy()
 		mModel.mNodes.forEach {
 			it.mSupportCondition.forEachIndexed { i, supCond ->
