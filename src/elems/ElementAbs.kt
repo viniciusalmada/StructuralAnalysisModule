@@ -19,10 +19,10 @@ abstract class ElementAbs(
 	model: StructureModel
 ) {
 	val mId: Int = id
-	val mNode_i: NodeAbs = model.mNodes.single { it.mId == nodeId_i }
-	val mNode_j: NodeAbs = model.mNodes.single { it.mId == nodeId_j }
-	val mMaterial: Material = model.mMaterials.single { it.mId == materialId }
-	val mSection: Section = model.mSections.single { it.mId == sectionId }
+	val mNodei: NodeAbs = model.mNodes.single { it.mId == nodeId_i }
+	val mNodej: NodeAbs = model.mNodes.single { it.mId == nodeId_j }
+	private val mMaterial: Material = model.mMaterials.single { it.mId == materialId }
+	private val mSection: Section = model.mSections.single { it.mId == sectionId }
 	val mHasHingeBegin: Boolean = hasHingeBegin
 	val mHasHingeEnd: Boolean = hasHingeEnd
 	val mLoad: DistributedLoad?
@@ -46,66 +46,62 @@ abstract class ElementAbs(
 	
 	fun calculateGlobalStiffnessMatrix(degreeOfFreedom: Int): DoubleMatrix {
 		val k = calculateLocalStiffnessMatrixOnGlobalSystem()
-		val B = calculateIncidenceMatrix(degreeOfFreedom)
-		val K = B.transpose() * k * B
-		return K
+		val matrixB = calculateIncidenceMatrix(degreeOfFreedom)
+		return matrixB.transpose() * k * matrixB
 	}
 	
 	fun calculateGlobalLoadVector(degreeOfFreedom: Int): DoubleMatrix {
 		val f = calculateLocalLoadVectorOnGlobalSystem()
-		val B = calculateIncidenceMatrix(degreeOfFreedom)
-		val P = B.transpose() * f
-		return P
+		val matrixB = calculateIncidenceMatrix(degreeOfFreedom)
+		return matrixB.transpose() * f
 	}
 	
-	fun calculateLocalStiffnessMatrixOnGlobalSystem(): DoubleMatrix {
-		val k_ = calculateLocalStiffnessMatrixOnLocalSystem()
-		val R = calculateRotationMatrix()
-		val k = R.transpose() * k_ * R
-		return k
+	private fun calculateLocalStiffnessMatrixOnGlobalSystem(): DoubleMatrix {
+		val k = calculateLocalStiffnessMatrixOnLocalSystem()
+		val matrixR = calculateRotationMatrix()
+		return matrixR.transpose() * k * matrixR
 	}
 	
-	fun calculateLocalLoadVectorOnGlobalSystem(): DoubleMatrix {
-		val f_ = calculateLocalLoadVectorOnLocalSystem()
-		val R = calculateRotationMatrix()
-		val f = R.transpose() * f_
-		return f
+	private fun calculateLocalLoadVectorOnGlobalSystem(): DoubleMatrix {
+		val f = calculateLocalLoadVectorOnLocalSystem()
+		val matrixR = calculateRotationMatrix()
+		return matrixR.transpose() * f
 	}
 
-	protected fun dx() = this.mNode_j.mCoordX - this.mNode_i.mCoordX
-	protected fun dy() = this.mNode_j.mCoordY - this.mNode_i.mCoordY
-	protected fun dz() = this.mNode_j.mCoordZ - this.mNode_i.mCoordZ
-	protected fun L(): Double {
+	private fun dx() = this.mNodej.mCoordX - this.mNodei.mCoordX
+	private fun dy() = this.mNodej.mCoordY - this.mNodei.mCoordY
+	private fun dz() = this.mNodej.mCoordZ - this.mNodei.mCoordZ
+	protected fun length(): Double {
 		return if (getType() == StructureType.GRILLAGE)
 			sqrt(pow(dx(), 2.0) + pow(dz(), 2.0))
 		else
 			sqrt(pow(dx(), 2.0) + pow(dy(), 2.0))
 	}
 	
-	protected fun L2() = pow(L(), 2.0)
-	protected fun L3() = pow(L(), 3.0)
+	protected fun squareLength() = pow(length(), 2.0)
+	protected fun cubicLength() = pow(length(), 3.0)
 	protected fun sinA(): Double {
 		return if (getType() == StructureType.GRILLAGE)
-			dz() / L()
+			dz() / length()
 		else
-			dy() / L()
+			dy() / length()
 	}
 	
 	protected fun cosA(): Double {
 		return if (getType() == StructureType.GRILLAGE)
-			dx() / L()
+			dx() / length()
 		else
-			dx() / L()
+			dx() / length()
 	}
 	
-	protected fun EIz() = this.mMaterial.mLongElasticityModulus * this.mSection.mInertiaMomentZ
-	protected fun EA() = this.mMaterial.mLongElasticityModulus * this.mSection.mArea
-	protected fun GJ() = this.mMaterial.mTransvElasticityModulus * this.mSection.getPolarInertiaMoment()
+	protected fun flexuralStiff() = this.mMaterial.mLongElasticityModulus * this.mSection.mInertiaMomentZ
+	protected fun axialStiff() = this.mMaterial.mLongElasticityModulus * this.mSection.mArea
+	protected fun torsionStiff() = this.mMaterial.mTransvElasticityModulus * this.mSection.getPolarInertiaMoment()
 	
 	override fun toString(): String {
 		val element = StringBuilder()
 		element.append("Elem$mId\t")
-		element.append("L = ${L()} m\t")
+		element.append("length = ${length()} m\t")
 		element.append("E = ${mMaterial.mLongElasticityModulus} kN/m²\t")
 		element.append("A = ${mSection.mArea} m²\t")
 		element.append("I = ${mSection.mInertiaMomentY} m4\t")

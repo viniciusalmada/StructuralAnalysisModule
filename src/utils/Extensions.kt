@@ -8,7 +8,7 @@ fun DoubleMatrix.showAsNodeDirections(title: String) {
 
     var init = 1
     var node = 1
-	println("------${title}------")
+	println("------$title------")
 	this.forEachRowColumn { i, _, value ->
         if (i != init) {
             out.append("[")

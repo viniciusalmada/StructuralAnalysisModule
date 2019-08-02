@@ -20,5 +20,4 @@ const val DOF_NODE_PLANE_TRUSS = 2
 const val DOF_ELEM_PLANE_TRUSS = 4
 const val DOF_NODE_GRILLAGE = 3
 const val DOF_ELEM_GRILLAGE = 6
-const val NO_LOADS = -1
 const val INVALID_DIRECTION = -1

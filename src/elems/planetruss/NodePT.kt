@@ -10,12 +10,12 @@ class NodePT(id: Int, x: Double, y: Double, suppCondStrings: Array<String>, load
 		NodeAbs(id, x, y, 0.0, suppCondStrings, loadValues, stiffValues) {
 	
 	override fun calculateIncidenceMatrix(degreeOfFreedom: Int): DoubleMatrix {
-		val B = DoubleMatrix(DOF_NODE_PLANE_TRUSS, degreeOfFreedom)
+		val matrixB = DoubleMatrix(DOF_NODE_PLANE_TRUSS, degreeOfFreedom)
 		val e = getDirections()
 		for (i in 1..DOF_NODE_PLANE_TRUSS)
-			B[i - 1, e[i - 1] - 1] = 1.0
+			matrixB[i - 1, e[i - 1] - 1] = 1.0
 		
-		return B
+		return matrixB
 	}
 	
 	override fun calculateLocalLoadVector(): DoubleMatrix {

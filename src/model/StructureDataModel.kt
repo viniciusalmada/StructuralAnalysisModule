@@ -17,8 +17,36 @@ data class StructureDataModel(
 			val suppCond: Array<String>,
 			val loadValues: DoubleArray,
 			val stiffValues: DoubleArray
-	)
-	
+	) {
+		override fun equals(other: Any?): Boolean {
+			if (this === other) return true
+			if (javaClass != other?.javaClass) return false
+
+			other as NodeData
+
+			if (id != other.id) return false
+			if (x != other.x) return false
+			if (y != other.y) return false
+			if (z != other.z) return false
+			if (!suppCond.contentEquals(other.suppCond)) return false
+			if (!loadValues.contentEquals(other.loadValues)) return false
+			if (!stiffValues.contentEquals(other.stiffValues)) return false
+
+			return true
+		}
+
+		override fun hashCode(): Int {
+			var result = id
+			result = 31 * result + x.hashCode()
+			result = 31 * result + y.hashCode()
+			result = 31 * result + z.hashCode()
+			result = 31 * result + suppCond.contentHashCode()
+			result = 31 * result + loadValues.contentHashCode()
+			result = 31 * result + stiffValues.contentHashCode()
+			return result
+		}
+	}
+
 	data class MaterialData(
 		val id: Int,
 		val longElastModulus: Double,

@@ -8,12 +8,12 @@ import vsca.doublematrix.lib.DoubleMatrix
 import java.lang.Math.pow
 
 class DistributedLoad(
-	val id: Int,
-	val qxi: Double,
-	val qxj: Double,
-	val qyi: Double,
-	val qyj: Double,
-	val isLocalLoad: Boolean
+		val id: Int,
+		private val qxi: Double,
+		private val qxj: Double,
+		private val qyi: Double,
+		private val qyj: Double,
+		private val isLocalLoad: Boolean
 ) {
 	
 	companion object {
@@ -199,18 +199,18 @@ class DistributedLoad(
 				return getOnHingedHingedPlaneFrame(L, qxi, qxj, qyi, qyj)
 			}
 		} else {
-			val q_xi = qyi * sinA + qxi * cosA
-			val q_xj = qyj * sinA + qxj * cosA
-			val q_yi = qyi * cosA - qxi * sinA
-			val q_yj = qyj * cosA - qxj * sinA
+			val loadXi = qyi * sinA + qxi * cosA
+			val loadXj = qyj * sinA + qxj * cosA
+			val loadYi = qyi * cosA - qxi * sinA
+			val loadYj = qyj * cosA - qxj * sinA
 			if (!hasHingeBegin && !hasHingeEnd) {
-				return getOnFixedFixedPlaneFrame(L, q_xi, q_xj, q_yi, q_yj)
+				return getOnFixedFixedPlaneFrame(L, loadXi, loadXj, loadYi, loadYj)
 			} else if (hasHingeBegin && !hasHingeEnd) {
-				return getOnHingeFixedPlaneFrame(L, q_xi, q_xj, q_yi, q_yj)
+				return getOnHingeFixedPlaneFrame(L, loadXi, loadXj, loadYi, loadYj)
 			} else if (!hasHingeBegin && hasHingeEnd) {
-				return getOnFixedHingedPlaneFrame(L, q_xi, q_xj, q_yi, q_yj)
+				return getOnFixedHingedPlaneFrame(L, loadXi, loadXj, loadYi, loadYj)
 			} else if (hasHingeBegin && hasHingeEnd) {
-				return getOnHingedHingedPlaneFrame(L, q_xi, q_xj, q_yi, q_yj)
+				return getOnHingedHingedPlaneFrame(L, loadXi, loadXj, loadYi, loadYj)
 			}
 		}
 		return DoubleMatrix(DOF_ELEM_PLANE_FRAME, 1)
@@ -221,17 +221,15 @@ class DistributedLoad(
 		sinA: Double,
 		cosA: Double
 	): DoubleMatrix {
-		
-		if (isLocalLoad) {
-			return getOnHingedHingedPlaneTruss(L, qxi, qxj, qyi, qyj)
-			
+
+		return if (isLocalLoad) {
+			getOnHingedHingedPlaneTruss(L, qxi, qxj, qyi, qyj)
 		} else {
-			val q_xi = qyi * sinA + qxi * cosA
-			val q_xj = qyj * sinA + qxj * cosA
-			val q_yi = qyi * cosA - qxi * sinA
-			val q_yj = qyj * cosA - qxj * sinA
-			return getOnHingedHingedPlaneTruss(L, q_xi, q_xj, q_yi, q_yj)
-			
+			val loadXi = qyi * sinA + qxi * cosA
+			val loadXj = qyj * sinA + qxj * cosA
+			val loadYi = qyi * cosA - qxi * sinA
+			val loadYj = qyj * cosA - qxj * sinA
+			getOnHingedHingedPlaneTruss(L, loadXi, loadXj, loadYi, loadYj)
 		}
 	}
 	

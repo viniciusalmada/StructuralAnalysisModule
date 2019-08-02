@@ -33,10 +33,9 @@ abstract class NodeAbs(
 	abstract fun getDirection(index: Int): Int
 	
 	fun calculateGlobalLoadVector(degreeOfFreedom: Int): DoubleMatrix {
-		val B = calculateIncidenceMatrix(degreeOfFreedom)
+		val matrixB = calculateIncidenceMatrix(degreeOfFreedom)
 		val f = calculateLocalLoadVector()
-		val P = B.transpose() * f
-		return P
+		return matrixB.transpose() * f
 	}
 	
 	override fun hashCode(): Int {

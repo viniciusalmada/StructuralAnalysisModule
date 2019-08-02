@@ -11,12 +11,12 @@ class NodeG(id: Int, z: Double, x: Double, suppCondStrings: Array<String>, loadV
 	
 	
 	override fun calculateIncidenceMatrix(degreeOfFreedom: Int): DoubleMatrix {
-		val B = DoubleMatrix(DOF_NODE_GRILLAGE, degreeOfFreedom)
+		val matrixB = DoubleMatrix(DOF_NODE_GRILLAGE, degreeOfFreedom)
 		val e = getDirections()
-		for (i in 1..B.rows)
-			B[i - 1, e[i - 1] - 1] = 1.0
+		for (i in 1..matrixB.rows)
+			matrixB[i - 1, e[i - 1] - 1] = 1.0
 		
-		return B
+		return matrixB
 	}
 	
 	override fun calculateLocalLoadVector(): DoubleMatrix {

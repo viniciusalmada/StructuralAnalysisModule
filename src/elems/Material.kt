@@ -3,7 +3,7 @@ package elems
 class Material(id: Int, longElastMod: Double, poisson: Double, transvElastModulus: Double) {
 	val mId: Int = id
 	val mLongElasticityModulus: Double = longElastMod
-	val mPoissonRatio: Double
+	private val mPoissonRatio: Double
 	val mTransvElasticityModulus: Double
 	
 	init {
