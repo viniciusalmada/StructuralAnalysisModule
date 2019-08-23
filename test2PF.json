@@ -1,0 +1,102 @@
+{
+	"analysis": "PLANE_FRAME",
+	"nodes": [
+		{
+			"id": 2,
+			"x": 0.0,
+			"y": 0.0,
+			"suppCond": [
+				"FIX",
+				"FIX",
+				"FIX"
+			],
+			"loadValues": [
+				0.0,
+				0.0,
+				0.0
+			],
+			"stiffValues": [
+				0.0,
+				0.0,
+				0.0
+			]
+		},
+		{
+			"id": 3,
+			"x": 2.0,
+			"y": 3.0,
+			"suppCond": [
+				"FREE",
+				"FREE",
+				"FREE"
+			],
+			"loadValues": [
+				50.0,
+				-80.0,
+				20.0
+			],
+			"stiffValues": [
+				0.0,
+				0.0,
+				0.0
+			]
+		},
+		{
+			"id": 1,
+			"x": 5.0,
+			"y": -1.0,
+			"suppCond": [
+				"FIX",
+				"FIX",
+				"FIX"
+			],
+			"loadValues": [
+				0.0,
+				0.0,
+				0.0
+			],
+			"stiffValues": [
+				0.0,
+				0.0,
+				0.0
+			]
+		}
+	],
+	"materials": [
+		{
+			"id": 1,
+			"longElastModulus": 200000000.0,
+			"poissonRatio": 0.2
+		}
+	],
+	"sections": [
+		{
+			"id": 1,
+			"area": 0.008,
+			"inertiaMomentZ": 0.0004
+		}
+	],
+	"distributedLoads": [],
+	"elements": [
+		{
+			"id": 1,
+			"nodeId_i": 2,
+			"nodeId_j": 3,
+			"materialId": 1,
+			"sectionId": 1,
+			"hasHingedBegin": false,
+			"hasHingedEnd": false,
+			"loadId": -1
+		},
+		{
+			"id": 2,
+			"nodeId_i": 3,
+			"nodeId_j": 1,
+			"materialId": 1,
+			"sectionId": 1,
+			"hasHingedBegin": false,
+			"hasHingedEnd": false,
+			"loadId": -1
+		}
+	]
+}

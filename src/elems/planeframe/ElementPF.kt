@@ -21,8 +21,8 @@ class ElementPF(
 
 	override fun calculateIncidenceMatrix(degreeOfFreedom: Int): DoubleMatrix {
 		val matrixB = DoubleMatrix(DOF_ELEM_PLANE_FRAME, degreeOfFreedom)
-		val i = this.mNodei.mId
-		val j = this.mNodej.mId
+		val i = this.mNode1.mId
+		val j = this.mNode2.mId
 		val e = intArrayOf(
 				DOF_NODE_PLANE_FRAME * i - 2,
 				DOF_NODE_PLANE_FRAME * i - 1,

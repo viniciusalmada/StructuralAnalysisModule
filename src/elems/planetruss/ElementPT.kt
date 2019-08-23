@@ -19,8 +19,8 @@ class ElementPT(
 	
 	override fun calculateIncidenceMatrix(degreeOfFreedom: Int): DoubleMatrix {
 		val matrixB = DoubleMatrix(DOF_ELEM_PLANE_TRUSS, degreeOfFreedom)
-		val i = this.mNodei.mId
-		val j = this.mNodej.mId
+		val i = this.mNode1.mId
+		val j = this.mNode2.mId
 		val e = intArrayOf(
 			DOF_NODE_PLANE_TRUSS * i - 1,
 			DOF_NODE_PLANE_TRUSS * i,

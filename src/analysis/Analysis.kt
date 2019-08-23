@@ -164,13 +164,16 @@ class Analysis(
 	 */
 	fun doAnalysis(): Pair<ArrayList<ElementResult>, ArrayList<NodeResult>> {
 		val matrixK = calculateStiffnessMatrix()
+		println(matrixK)
 		val vectorF = calculateLoadVector()
+		println(vectorF)
 		val matrixKb = calculateStiffnessMatrixBoundaryCondition(matrixK)
+		println(matrixKb)
 		val vectorD = calculateDisplacementsVector(matrixKb, vectorF)
 		val vectorR = calculateSupportReactionsVector(vectorF, vectorD)
 
-		vectorD.showAsNodeDirections("Displacements")
-		vectorR.showAsNodeDirections("Reactions")
+//		vectorD.showAsNodeDirections("Displacements")
+//		vectorR.showAsNodeDirections("Reactions")
 		return calculateResults(vectorD, vectorR)
 	}
 

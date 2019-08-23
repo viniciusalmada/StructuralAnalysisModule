@@ -8,21 +8,23 @@ import java.lang.Math.sqrt
 
 
 abstract class ElementAbs(
-	id: Int,
-	nodeId_i: Int,
-	nodeId_j: Int,
-	materialId: Int,
-	sectionId: Int,
-	hasHingeBegin: Boolean,
-	hasHingeEnd: Boolean,
-	loadId: Int,
-	model: StructureModel
+		id: Int,
+		nodeId1: Int,
+		nodeId2: Int,
+		materialId: Int,
+		sectionId: Int,
+		hasHingeBegin: Boolean,
+		hasHingeEnd: Boolean,
+		loadId: Int,
+		model: StructureModel
 ) {
-	val mId: Int = id
-	val mNodei: NodeAbs = model.mNodes.single { it.mId == nodeId_i }
-	val mNodej: NodeAbs = model.mNodes.single { it.mId == nodeId_j }
+
 	private val mMaterial: Material = model.mMaterials.single { it.mId == materialId }
 	private val mSection: Section = model.mSections.single { it.mId == sectionId }
+
+	val mId: Int = id
+	val mNode1: NodeAbs = model.mNodes.single { it.mId == nodeId1 }
+	val mNode2: NodeAbs = model.mNodes.single { it.mId == nodeId2 }
 	val mHasHingeBegin: Boolean = hasHingeBegin
 	val mHasHingeEnd: Boolean = hasHingeEnd
 	val mLoad: DistributedLoad?
@@ -68,9 +70,12 @@ abstract class ElementAbs(
 		return matrixR.transpose() * f
 	}
 
-	private fun dx() = this.mNodej.mCoordX - this.mNodei.mCoordX
-	private fun dy() = this.mNodej.mCoordY - this.mNodei.mCoordY
-	private fun dz() = this.mNodej.mCoordZ - this.mNodei.mCoordZ
+	private fun dx() = this.mNode2.mCoordX - this.mNode1.mCoordX
+
+	private fun dy() = this.mNode2.mCoordY - this.mNode1.mCoordY
+
+	private fun dz() = this.mNode2.mCoordZ - this.mNode1.mCoordZ
+
 	protected fun length(): Double {
 		return if (getType() == StructureType.GRILLAGE)
 			sqrt(pow(dx(), 2.0) + pow(dz(), 2.0))
@@ -79,7 +84,9 @@ abstract class ElementAbs(
 	}
 	
 	protected fun squareLength() = pow(length(), 2.0)
+
 	protected fun cubicLength() = pow(length(), 3.0)
+
 	protected fun sinA(): Double {
 		return if (getType() == StructureType.GRILLAGE)
 			dz() / length()
@@ -95,7 +102,9 @@ abstract class ElementAbs(
 	}
 	
 	protected fun flexuralStiff() = this.mMaterial.mLongElasticityModulus * this.mSection.mInertiaMomentZ
+
 	protected fun axialStiff() = this.mMaterial.mLongElasticityModulus * this.mSection.mArea
+
 	protected fun torsionStiff() = this.mMaterial.mTransvElasticityModulus * this.mSection.getPolarInertiaMoment()
 	
 	override fun toString(): String {
