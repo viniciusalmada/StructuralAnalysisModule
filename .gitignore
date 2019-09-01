@@ -5,6 +5,5 @@
 *.docx
 *lixo.json
 /out
-/lib
 /auxiliar
 *.iml

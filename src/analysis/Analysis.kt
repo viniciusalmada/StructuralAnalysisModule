@@ -4,7 +4,6 @@ import elems.results.ElementResult
 import elems.results.NodeResult
 import model.StructureModel
 import utils.SupportCondition
-import utils.showAsNodeDirections
 import vsca.doublematrix.lib.DoubleMatrix
 import vsca.doublematrix.lib.MatrixLib
 
@@ -38,7 +37,7 @@ class Analysis(
 	private fun calculateStiffnessMatrix(): DoubleMatrix {
 		var matrixK = DoubleMatrix(mDegreeOfFreedom)
 		mModel.mElements.forEach {
-			val k = it.calculateGlobalStiffnessMatrix(mDegreeOfFreedom)
+			val k = it.calculateGlobalStiffnessMatrix()
 			matrixK += k
 		}
 
@@ -88,7 +87,7 @@ class Analysis(
 			vectorF += fn
 		}
 		mModel.mElements.forEach {
-			val f = it.calculateGlobalLoadVector(mDegreeOfFreedom)
+			val f = it.calculateGlobalLoadVector()
 			vectorF += f
 		}
 		return vectorF

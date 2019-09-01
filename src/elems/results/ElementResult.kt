@@ -1,10 +1,12 @@
 package elems.results
 
-import elems.ElementAbs
+import elems.Element
+import matrixes.IncidenceVector
+import matrixes.RotatesMatrix
 import vsca.doublematrix.lib.DoubleMatrix
 
 @Suppress("UNUSED_PARAMETER")
-class ElementResult(element: ElementAbs, D: DoubleMatrix, dof: Int) {
+class ElementResult(element: Element, D: DoubleMatrix, dof: Int) {
 
 	private val dg: DoubleMatrix // Displacements global
 	private val d: DoubleMatrix // Displacements local
@@ -19,13 +21,13 @@ class ElementResult(element: ElementAbs, D: DoubleMatrix, dof: Int) {
 	val rg: DoubleMatrix // Support Reactions
 	
 	init {
-		val matrixB = element.calculateIncidenceMatrix(dof)
-		val matrixR = element.calculateRotationMatrix()
+		val matrixB = IncidenceVector(element).vector()
+		val matrixR = RotatesMatrix(element).matrix()
 		val k = element.calculateLocalStiffnessMatrixOnLocalSystem()
 		val f = element.calculateLocalLoadVectorOnLocalSystem()
 		
-		this.dg = element.calculateIncidenceMatrix(dof) * D
-		this.d = element.calculateRotationMatrix() * this.dg
+		this.dg = matrixB * D
+		this.d = matrixR * this.dg
 		this.f = (k * this.d) + f
 		fg = matrixR.transpose() * this.f
 		rg = matrixB.transpose() * (matrixR.transpose() * (this.f - f))

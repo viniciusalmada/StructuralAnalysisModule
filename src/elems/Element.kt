@@ -1,13 +1,17 @@
 package elems
 
+import matrixes.IncidenceVector
+import matrixes.LoadsVector
+import matrixes.RotatesMatrix
+import matrixes.StiffnessMatrix
 import model.StructureModel
 import utils.StructureType
 import vsca.doublematrix.lib.DoubleMatrix
-import java.lang.Math.pow
-import java.lang.Math.sqrt
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 
-abstract class ElementAbs(
+abstract class Element(
 		id: Int,
 		nodeId1: Int,
 		nodeId2: Int,
@@ -29,8 +33,6 @@ abstract class ElementAbs(
 	val mHasHingeEnd: Boolean = hasHingeEnd
 	val mLoad: DistributedLoad?
 	
-	abstract fun getType(): StructureType
-	
 	init {
 		if (loadId != -1)
 			this.mLoad = model.mDistributedLoads.single { it.id == loadId }
@@ -38,35 +40,29 @@ abstract class ElementAbs(
 			this.mLoad = null
 	}
 	
-	abstract fun calculateIncidenceMatrix(degreeOfFreedom: Int): DoubleMatrix
+	abstract fun getType(): StructureType
 	
-	abstract fun calculateLocalStiffnessMatrixOnLocalSystem(): DoubleMatrix
-	
-	abstract fun calculateRotationMatrix(): DoubleMatrix
-	
-	abstract fun calculateLocalLoadVectorOnLocalSystem(): DoubleMatrix
-	
-	fun calculateGlobalStiffnessMatrix(degreeOfFreedom: Int): DoubleMatrix {
+	fun calculateGlobalStiffnessMatrix(): DoubleMatrix {
 		val k = calculateLocalStiffnessMatrixOnGlobalSystem()
-		val matrixB = calculateIncidenceMatrix(degreeOfFreedom)
+		val matrixB = IncidenceVector(this).vector()
 		return matrixB.transpose() * k * matrixB
 	}
 	
-	fun calculateGlobalLoadVector(degreeOfFreedom: Int): DoubleMatrix {
+	fun calculateGlobalLoadVector(): DoubleMatrix {
 		val f = calculateLocalLoadVectorOnGlobalSystem()
-		val matrixB = calculateIncidenceMatrix(degreeOfFreedom)
+		val matrixB = IncidenceVector(this).vector()
 		return matrixB.transpose() * f
 	}
 	
 	private fun calculateLocalStiffnessMatrixOnGlobalSystem(): DoubleMatrix {
-		val k = calculateLocalStiffnessMatrixOnLocalSystem()
-		val matrixR = calculateRotationMatrix()
+		val k = StiffnessMatrix(this).matrix()
+		val matrixR = RotatesMatrix(this).matrix()
 		return matrixR.transpose() * k * matrixR
 	}
 	
 	private fun calculateLocalLoadVectorOnGlobalSystem(): DoubleMatrix {
-		val f = calculateLocalLoadVectorOnLocalSystem()
-		val matrixR = calculateRotationMatrix()
+		val f = LoadsVector(this).vector()
+		val matrixR = RotatesMatrix(this).matrix()
 		return matrixR.transpose() * f
 	}
 
@@ -75,37 +71,37 @@ abstract class ElementAbs(
 	private fun dy() = this.mNode2.mCoordY - this.mNode1.mCoordY
 
 	private fun dz() = this.mNode2.mCoordZ - this.mNode1.mCoordZ
-
-	protected fun length(): Double {
+	
+	fun length(): Double {
 		return if (getType() == StructureType.GRILLAGE)
-			sqrt(pow(dx(), 2.0) + pow(dz(), 2.0))
+			sqrt(dx().pow(2.0) + dz().pow(2.0))
 		else
-			sqrt(pow(dx(), 2.0) + pow(dy(), 2.0))
+			sqrt(dx().pow(2.0) + dy().pow(2.0))
 	}
 	
-	protected fun squareLength() = pow(length(), 2.0)
-
-	protected fun cubicLength() = pow(length(), 3.0)
-
-	protected fun sinA(): Double {
+	fun squareLength() = length().pow(2.0)
+	
+	fun cubicLength() = length().pow(3.0)
+	
+	fun sinA(): Double {
 		return if (getType() == StructureType.GRILLAGE)
 			dz() / length()
 		else
 			dy() / length()
 	}
 	
-	protected fun cosA(): Double {
+	fun cosA(): Double {
 		return if (getType() == StructureType.GRILLAGE)
 			dx() / length()
 		else
 			dx() / length()
 	}
 	
-	protected fun flexuralStiff() = this.mMaterial.mLongElasticityModulus * this.mSection.mInertiaMomentZ
-
-	protected fun axialStiff() = this.mMaterial.mLongElasticityModulus * this.mSection.mArea
-
-	protected fun torsionStiff() = this.mMaterial.mTransvElasticityModulus * this.mSection.getPolarInertiaMoment()
+	fun flexuralStiff() = this.mMaterial.mLongElasticityModulus * this.mSection.mInertiaMomentZ
+	
+	fun axialStiff() = this.mMaterial.mLongElasticityModulus * this.mSection.mArea
+	
+	fun torsionStiff() = this.mMaterial.mTransverseElasticityModulus * this.mSection.getPolarInertiaMoment()
 	
 	override fun toString(): String {
 		val element = StringBuilder()
@@ -122,6 +118,6 @@ abstract class ElementAbs(
 	}
 	
 	override fun equals(other: Any?): Boolean {
-		return this.mId == (other as ElementAbs).mId
+		return this.mId == (other as Element).mId
 	}
 }
