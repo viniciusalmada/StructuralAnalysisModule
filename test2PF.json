@@ -24,7 +24,7 @@
 		{
 			"id": 3,
 			"x": 2.0,
-			"y": 3.0,
+			"y": 2.0,
 			"suppCond": [
 				"FREE",
 				"FREE",
@@ -43,8 +43,8 @@
 		},
 		{
 			"id": 1,
-			"x": 5.0,
-			"y": -1.0,
+			"x": 4.0,
+			"y": -2.0,
 			"suppCond": [
 				"FIX",
 				"FIX",
@@ -80,8 +80,8 @@
 	"elements": [
 		{
 			"id": 1,
-			"nodeId_i": 2,
-			"nodeId_j": 3,
+			"nodeId1": 2,
+			"nodeId2": 3,
 			"materialId": 1,
 			"sectionId": 1,
 			"hasHingedBegin": false,
@@ -90,8 +90,8 @@
 		},
 		{
 			"id": 2,
-			"nodeId_i": 3,
-			"nodeId_j": 1,
+			"nodeId1": 1,
+			"nodeId2": 3,
 			"materialId": 1,
 			"sectionId": 1,
 			"hasHingedBegin": false,

@@ -4,8 +4,7 @@ import utils.DOF_ELEM_BEAM
 import utils.DOF_ELEM_GRILLAGE
 import utils.DOF_ELEM_PLANE_FRAME
 import utils.DOF_ELEM_PLANE_TRUSS
-import vsca.doublematrix.lib.DoubleMatrix
-import java.lang.Math.pow
+import kotlin.math.pow
 
 class DistributedLoad(
 		val id: Int,
@@ -23,14 +22,14 @@ class DistributedLoad(
 			q_xj: Double,
 			q_yi: Double,
 			q_yj: Double
-		): DoubleMatrix {
-			val r = DoubleMatrix(DOF_ELEM_PLANE_FRAME, 1)
-			r[0, 0] = -(2 * q_xi + q_xj) * L / 6
-			r[1, 0] = -(7 * q_yi + 3 * q_yj) * L / 20
-			r[2, 0] = -(3 * q_yi + 2 * q_yj) * pow(L, 2.0) / 60
-			r[3, 0] = -(q_xi + 2 * q_xj) * L / 6
-			r[4, 0] = -(3 * q_yi + 7 * q_yj) * L / 20
-			r[5, 0] = (2 * q_yi + 3 * q_yj) * pow(L, 2.0) / 60
+		): DoubleArray {
+			val r = DoubleArray(DOF_ELEM_PLANE_FRAME)
+			r[0] = -(2 * q_xi + q_xj) * L / 6
+			r[1] = -(7 * q_yi + 3 * q_yj) * L / 20
+			r[2] = -(3 * q_yi + 2 * q_yj) * L.pow(2.0) / 60
+			r[3] = -(q_xi + 2 * q_xj) * L / 6
+			r[4] = -(3 * q_yi + 7 * q_yj) * L / 20
+			r[5] = (2 * q_yi + 3 * q_yj) * L.pow(2.0) / 60
 			return r
 		}
 		
@@ -40,14 +39,14 @@ class DistributedLoad(
 			q_xj: Double,
 			q_yi: Double,
 			q_yj: Double
-		): DoubleMatrix {
-			val r = DoubleMatrix(DOF_ELEM_PLANE_FRAME, 1)
-			r[0, 0] = -(2 * q_xi + q_xj) * L / 6
-			r[1, 0] = -(11 * q_yi + 4 * q_yj) * L / 40
-			r[2, 0] = 0.0
-			r[3, 0] = -(q_xi + 2 * q_xj) * L / 6
-			r[4, 0] = -(9 * q_yi + 16 * q_yj) * L / 40
-			r[5, 0] = (7 * q_yi + 8 * q_yj) * pow(L, 2.0) / 120
+		): DoubleArray {
+			val r = DoubleArray(DOF_ELEM_PLANE_FRAME)
+			r[0] = -(2 * q_xi + q_xj) * L / 6
+			r[1] = -(11 * q_yi + 4 * q_yj) * L / 40
+			r[2] = 0.0
+			r[3] = -(q_xi + 2 * q_xj) * L / 6
+			r[4] = -(9 * q_yi + 16 * q_yj) * L / 40
+			r[5] = (7 * q_yi + 8 * q_yj) * L.pow(2.0) / 120
 			return r
 		}
 		
@@ -57,14 +56,14 @@ class DistributedLoad(
 			q_xj: Double,
 			q_yi: Double,
 			q_yj: Double
-		): DoubleMatrix {
-			val r = DoubleMatrix(DOF_ELEM_PLANE_FRAME, 1)
-			r[0, 0] = -(2 * q_xi + q_xj) * L / 6
-			r[1, 0] = -(16 * q_yi + 9 * q_yj) * L / 40
-			r[2, 0] = -(8 * q_yi + 7 * q_yj) * pow(L, 2.0) / 120
-			r[3, 0] = -(q_xi + 2 * q_xj) * L / 6
-			r[4, 0] = -(4 * q_yi + 11 * q_yj) * L / 40
-			r[5, 0] = 0.0
+		): DoubleArray {
+			val r = DoubleArray(DOF_ELEM_PLANE_FRAME)
+			r[0] = -(2 * q_xi + q_xj) * L / 6
+			r[1] = -(16 * q_yi + 9 * q_yj) * L / 40
+			r[2] = -(8 * q_yi + 7 * q_yj) * L.pow(2.0) / 120
+			r[3] = -(q_xi + 2 * q_xj) * L / 6
+			r[4] = -(4 * q_yi + 11 * q_yj) * L / 40
+			r[5] = 0.0
 			return r
 		}
 		
@@ -74,14 +73,14 @@ class DistributedLoad(
 			q_xj: Double,
 			q_yi: Double,
 			q_yj: Double
-		): DoubleMatrix {
-			val r = DoubleMatrix(DOF_ELEM_PLANE_FRAME, 1)
-			r[0, 0] = -(2 * q_xi + q_xj) * L / 6
-			r[1, 0] = -(2 * q_yi + q_yj) * L / 6
-			r[2, 0] = 0.0
-			r[3, 0] = -(q_xi + 2 * q_xj) * L / 6
-			r[4, 0] = -(q_yi + 2 * q_yj) * L / 6
-			r[5, 0] = 0.0
+		): DoubleArray {
+			val r = DoubleArray(DOF_ELEM_PLANE_FRAME)
+			r[0] = -(2 * q_xi + q_xj) * L / 6
+			r[1] = -(2 * q_yi + q_yj) * L / 6
+			r[2] = 0.0
+			r[3] = -(q_xi + 2 * q_xj) * L / 6
+			r[4] = -(q_yi + 2 * q_yj) * L / 6
+			r[5] = 0.0
 			return r
 		}
 		
@@ -91,12 +90,12 @@ class DistributedLoad(
 			q_xj: Double,
 			q_yi: Double,
 			q_yj: Double
-		): DoubleMatrix {
-			val r = DoubleMatrix(DOF_ELEM_PLANE_TRUSS, 1)
-			r[0, 0] = -(2 * q_xi + q_xj) * L / 6
-			r[1, 0] = -(2 * q_yi + q_yj) * L / 6
-			r[2, 0] = -(q_xi + 2 * q_xj) * L / 6
-			r[3, 0] = -(q_yi + 2 * q_yj) * L / 6
+		): DoubleArray {
+			val r = DoubleArray(DOF_ELEM_PLANE_TRUSS)
+			r[0] = -(2 * q_xi + q_xj) * L / 6
+			r[1] = -(2 * q_yi + q_yj) * L / 6
+			r[2] = -(q_xi + 2 * q_xj) * L / 6
+			r[3] = -(q_yi + 2 * q_yj) * L / 6
 			return r
 		}
 		
@@ -104,12 +103,12 @@ class DistributedLoad(
 			L: Double,
 			q_yi: Double,
 			q_yj: Double
-		): DoubleMatrix {
-			val r = DoubleMatrix(DOF_ELEM_GRILLAGE, 1)
-			r[1, 0] = -(7 * q_yi + 3 * q_yj) * L / 20
-			r[2, 0] = -(3 * q_yi + 2 * q_yj) * pow(L, 2.0) / 60
-			r[4, 0] = -(3 * q_yi + 7 * q_yj) * L / 20
-			r[5, 0] = (2 * q_yi + 3 * q_yj) * pow(L, 2.0) / 60
+		): DoubleArray {
+			val r = DoubleArray(DOF_ELEM_GRILLAGE)
+			r[1] = -(7 * q_yi + 3 * q_yj) * L / 20
+			r[2] = -(3 * q_yi + 2 * q_yj) * L.pow(2.0) / 60
+			r[4] = -(3 * q_yi + 7 * q_yj) * L / 20
+			r[5] = (2 * q_yi + 3 * q_yj) * L.pow(2.0) / 60
 			return r
 		}
 		
@@ -117,12 +116,12 @@ class DistributedLoad(
 			L: Double,
 			q_yi: Double,
 			q_yj: Double
-		): DoubleMatrix {
-			val r = DoubleMatrix(DOF_ELEM_PLANE_FRAME, 1)
-			r[1, 0] = -(11 * q_yi + 4 * q_yj) * L / 40
-			r[2, 0] = 0.0
-			r[4, 0] = -(9 * q_yi + 16 * q_yj) * L / 40
-			r[5, 0] = (7 * q_yi + 8 * q_yj) * pow(L, 2.0) / 120
+		): DoubleArray {
+			val r = DoubleArray(DOF_ELEM_PLANE_FRAME)
+			r[1] = -(11 * q_yi + 4 * q_yj) * L / 40
+			r[2] = 0.0
+			r[4] = -(9 * q_yi + 16 * q_yj) * L / 40
+			r[5] = (7 * q_yi + 8 * q_yj) * L.pow(2.0) / 120
 			return r
 		}
 		
@@ -130,12 +129,12 @@ class DistributedLoad(
 			L: Double,
 			q_yi: Double,
 			q_yj: Double
-		): DoubleMatrix {
-			val r = DoubleMatrix(DOF_ELEM_PLANE_FRAME, 1)
-			r[1, 0] = -(16 * q_yi + 9 * q_yj) * L / 40
-			r[2, 0] = -(8 * q_yi + 7 * q_yj) * pow(L, 2.0) / 120
-			r[4, 0] = -(4 * q_yi + 11 * q_yj) * L / 40
-			r[5, 0] = 0.0
+		): DoubleArray {
+			val r = DoubleArray(DOF_ELEM_PLANE_FRAME)
+			r[1] = -(16 * q_yi + 9 * q_yj) * L / 40
+			r[2] = -(8 * q_yi + 7 * q_yj) * L.pow(2.0) / 120
+			r[4] = -(4 * q_yi + 11 * q_yj) * L / 40
+			r[5] = 0.0
 			return r
 		}
 		
@@ -143,39 +142,39 @@ class DistributedLoad(
 			L: Double,
 			q_yi: Double,
 			q_yj: Double
-		): DoubleMatrix {
-			val r = DoubleMatrix(DOF_ELEM_PLANE_FRAME, 1)
-			r[1, 0] = -(2 * q_yi + q_yj) * L / 6
-			r[2, 0] = 0.0
-			r[4, 0] = -(q_yi + 2 * q_yj) * L / 6
-			r[5, 0] = 0.0
+		): DoubleArray {
+			val r = DoubleArray(DOF_ELEM_PLANE_FRAME)
+			r[1] = -(2 * q_yi + q_yj) * L / 6
+			r[2] = 0.0
+			r[4] = -(q_yi + 2 * q_yj) * L / 6
+			r[5] = 0.0
 			return r
 		}
-		
-		private fun getOnFixedFixedBeam(L: Double, q_yi: Double, q_yj: Double): DoubleMatrix {
-			val r = DoubleMatrix(DOF_ELEM_BEAM, 1)
-			r[0, 0] = -(7 * q_yi + 3 * q_yj) * L / 20
-			r[1, 0] = -(3 * q_yi + 2 * q_yj) * pow(L, 2.0) / 60
-			r[2, 0] = -(3 * q_yi + 7 * q_yj) * L / 20
-			r[3, 0] = (2 * q_yi + 3 * q_yj) * pow(L, 2.0) / 60
+
+		private fun getOnFixedFixedBeam(L: Double, q_yi: Double, q_yj: Double): DoubleArray {
+			val r = DoubleArray(DOF_ELEM_BEAM)
+			r[0] = -(7 * q_yi + 3 * q_yj) * L / 20
+			r[1] = -(3 * q_yi + 2 * q_yj) * L.pow(2.0) / 60
+			r[2] = -(3 * q_yi + 7 * q_yj) * L / 20
+			r[3] = (2 * q_yi + 3 * q_yj) * L.pow(2.0) / 60
 			return r
 		}
-		
-		private fun getOnHingeFixedBeam(L: Double, q_yi: Double, q_yj: Double): DoubleMatrix {
-			val r = DoubleMatrix(DOF_ELEM_BEAM, 1)
-			r[0, 0] = -(11 * q_yi + 4 * q_yj) * L / 40
-			r[1, 0] = 0.0
-			r[2, 0] = -(9 * q_yi + 16 * q_yj) * L / 40
-			r[3, 0] = (7 * q_yi + 8 * q_yj) * pow(L, 2.0) / 120
+
+		private fun getOnHingeFixedBeam(L: Double, q_yi: Double, q_yj: Double): DoubleArray {
+			val r = DoubleArray(DOF_ELEM_BEAM)
+			r[0] = -(11 * q_yi + 4 * q_yj) * L / 40
+			r[1] = 0.0
+			r[2] = -(9 * q_yi + 16 * q_yj) * L / 40
+			r[3] = (7 * q_yi + 8 * q_yj) * L.pow(2.0) / 120
 			return r
 		}
-		
-		private fun getOnFixedHingedBeam(L: Double, q_yi: Double, q_yj: Double): DoubleMatrix {
-			val r = DoubleMatrix(DOF_ELEM_BEAM, 1)
-			r[0, 0] = -(16 * q_yi + 9 * q_yj) * L / 40
-			r[1, 0] = -(8 * q_yi + 7 * q_yj) * pow(L, 2.0) / 120
-			r[2, 0] = -(4 * q_yi + 11 * q_yj) * L / 40
-			r[3, 0] = 0.0
+
+		private fun getOnFixedHingedBeam(L: Double, q_yi: Double, q_yj: Double): DoubleArray {
+			val r = DoubleArray(DOF_ELEM_BEAM)
+			r[0] = -(16 * q_yi + 9 * q_yj) * L / 40
+			r[1] = -(8 * q_yi + 7 * q_yj) * L.pow(2.0) / 120
+			r[2] = -(4 * q_yi + 11 * q_yj) * L / 40
+			r[3] = 0.0
 			return r
 		}
 	}
@@ -186,7 +185,7 @@ class DistributedLoad(
 		cosA: Double,
 		hasHingeBegin: Boolean,
 		hasHingeEnd: Boolean
-	): DoubleMatrix {
+	): DoubleArray {
 		
 		if (isLocalLoad) {
 			if (!hasHingeBegin && !hasHingeEnd) {
@@ -213,14 +212,14 @@ class DistributedLoad(
 				return getOnHingedHingedPlaneFrame(L, loadXi, loadXj, loadYi, loadYj)
 			}
 		}
-		return DoubleMatrix(DOF_ELEM_PLANE_FRAME, 1)
+		return DoubleArray(DOF_ELEM_PLANE_FRAME)
 	}
 	
 	fun getPlaneTrussSupportReaction(
 		L: Double,
 		sinA: Double,
 		cosA: Double
-	): DoubleMatrix {
+	): DoubleArray {
 
 		return if (isLocalLoad) {
 			getOnHingedHingedPlaneTruss(L, qxi, qxj, qyi, qyj)
@@ -237,7 +236,7 @@ class DistributedLoad(
 		L: Double,
 		hasHingeBegin: Boolean,
 		hasHingeEnd: Boolean
-	): DoubleMatrix {
+	): DoubleArray {
 		if (qxi != 0.0 || qxj != 0.0) {
 			throw RuntimeException("Grillage structure do not support loads on X direction")
 		}
@@ -249,11 +248,11 @@ class DistributedLoad(
 			return getOnFixedHingedGrillage(L, qyi, qyj)
 		else if (!hasHingeBegin && !hasHingeEnd)
 			return getOnHingedHingedGrillage(L, qyi, qyj)
-		
-		return DoubleMatrix(DOF_ELEM_GRILLAGE, 1)
+
+		return DoubleArray(DOF_ELEM_GRILLAGE)
 	}
-	
-	fun getBeamSupportReaction(L: Double, hasHingeBegin: Boolean, hasHingeEnd: Boolean): DoubleMatrix {
+
+	fun getBeamSupportReaction(L: Double, hasHingeBegin: Boolean, hasHingeEnd: Boolean): DoubleArray {
 		if (qxi != 0.0 || qxj != 0.0) {
 			throw RuntimeException("Beams structure do not support loads on X direction")
 		}
@@ -264,7 +263,7 @@ class DistributedLoad(
 		} else if (!hasHingeBegin && hasHingeEnd) {
 			return getOnFixedHingedBeam(L, qyi, qyj)
 		}
-		
-		return DoubleMatrix(DOF_ELEM_BEAM, 1)
+
+		return DoubleArray(DOF_ELEM_BEAM)
 	}
 }

@@ -15,7 +15,7 @@ class StiffnessMatrix(private val element: Element) {
 	private val torsionStiff = element.torsionStiff()
 	
 	fun matrix(): DoubleMatrix {
-		return when (element.getType()) {
+		return when (element.mStructureType) {
 			StructureType.PLANE_FRAME -> planeFrameStiffness()
 			StructureType.BEAM -> beamStiffness()
 			StructureType.PLANE_TRUSS -> planeTrussStiffness()

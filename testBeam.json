@@ -39,8 +39,8 @@
 	"elements": [
 		{
 			"id": 1,
-			"nodeId_i": 1,
-			"nodeId_j": 2,
+			"nodeId1": 1,
+			"nodeId2": 2,
 			"materialId": 1,
 			"sectionId": 1,
 			"hasHingedBegin": false,
@@ -48,8 +48,8 @@
 			"loadId": -1
 		}, {
 			"id": 2,
-			"nodeId_i": 2,
-			"nodeId_j": 3,
+			"nodeId1": 2,
+			"nodeId2": 3,
 			"materialId": 1,
 			"sectionId": 1,
 			"hasHingedBegin": false,

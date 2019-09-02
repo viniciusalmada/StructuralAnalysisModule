@@ -2,35 +2,40 @@ package elems.results
 
 import elems.Element
 import matrixes.IncidenceVector
+import matrixes.LoadsVector
 import matrixes.RotatesMatrix
-import vsca.doublematrix.lib.DoubleMatrix
+import matrixes.StiffnessMatrix
+import utils.minus
+import utils.plus
+import utils.subVectorFromIncidence
+import utils.times
 
 @Suppress("UNUSED_PARAMETER")
-class ElementResult(element: Element, D: DoubleMatrix, dof: Int) {
+class ElementResult(element: Element, vectorD: DoubleArray) {
 
-	private val dg: DoubleMatrix // Displacements global
-	private val d: DoubleMatrix // Displacements local
-	private val f: DoubleMatrix // Forces local
-	private val fg: DoubleMatrix // Forces global
+	private val dg: DoubleArray // Displacements global
+	private val d: DoubleArray // Displacements local
+	private val f: DoubleArray // Forces local
+	private val fg: DoubleArray // Forces global
 	private val internalDisplacements: ArrayList<Double> = ArrayList()
 	private val internalAxialForces: ArrayList<Double> = ArrayList()
 	private val internalBendingMoment: ArrayList<Double> = ArrayList()
 	private val internalNormalForce: ArrayList<Double> = ArrayList()
 
 	val id: Int = element.mId
-	val rg: DoubleMatrix // Support Reactions
+	val rg: DoubleArray // Support Reactions
 	
 	init {
-		val matrixB = IncidenceVector(element).vector()
-		val matrixR = RotatesMatrix(element).matrix()
-		val k = element.calculateLocalStiffnessMatrixOnLocalSystem()
-		val f = element.calculateLocalLoadVectorOnLocalSystem()
-		
-		this.dg = matrixB * D
-		this.d = matrixR * this.dg
-		this.f = (k * this.d) + f
-		fg = matrixR.transpose() * this.f
-		rg = matrixB.transpose() * (matrixR.transpose() * (this.f - f))
+		val vectorI = IncidenceVector(element).vector()
+		val localR = RotatesMatrix(element).matrix()
+		val localK = StiffnessMatrix(element).matrix()
+		val localF = LoadsVector(element).vector()
+
+		this.dg = vectorD.subVectorFromIncidence(vectorI)
+		this.d = localR * this.dg
+		this.f = (localK * this.d) + localF
+		this.fg = localR.transpose() * this.f
+		this.rg = (localR.transpose() * (this.f - localF))
 	}
 
 	/*private fun calculateInternalDisplacements(){

@@ -8,6 +8,7 @@ enum class StructureType {
 	BEAM, PLANE_FRAME, PLANE_TRUSS, GRILLAGE
 }
 
+
 const val ANALYSIS_PLANE_FRAME = "PLANE_FRAME"
 const val ANALYSIS_BEAM = "BEAM"
 const val ANALYSIS_PLANE_TRUSS = "PLANE_TRUSS"

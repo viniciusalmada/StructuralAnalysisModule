@@ -1,6 +1,11 @@
 import model.StructureModel
 import java.io.File
 
-fun main() {
-	StructureModel(File("test2PF.json"))
+class Main {
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            StructureModel(File("test2PF.json"))
+        }
+    }
 }

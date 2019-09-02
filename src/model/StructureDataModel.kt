@@ -59,8 +59,8 @@ data class StructureDataModel(
 	
 	data class ElementData(
 			val id: Int,
-			val nodeId_i: Int,
-			val nodeId_j: Int,
+			val nodeId1: Int,
+			val nodeId2: Int,
 			val materialId: Int,
 			val sectionId: Int,
 			val hasHingedBegin: Boolean,

@@ -9,7 +9,7 @@ class RotatesMatrix(private val element: Element) {
 	private val sine = element.sinA()
 	
 	fun matrix(): DoubleMatrix {
-		return when (element.getType()) {
+		return when (element.mStructureType) {
 			StructureType.PLANE_FRAME -> planeFrameRotationMatrix()
 			StructureType.BEAM -> DoubleMatrix.eye(DOF_ELEM_BEAM)
 			StructureType.PLANE_TRUSS -> planeTrussRotationMatrix()

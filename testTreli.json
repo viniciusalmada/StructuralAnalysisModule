@@ -86,92 +86,92 @@
 	"elements": [
 		{
 			"id": 1,
-			"nodeId_i": 1,
-			"nodeId_j": 2,
+			"nodeId1": 1,
+			"nodeId2": 2,
 			"materialId": 1,
 			"sectionId": 1,
 			"loadId": -1
 		}, {
 			"id": 2,
-			"nodeId_i": 1,
-			"nodeId_j": 4,
+			"nodeId1": 1,
+			"nodeId2": 4,
 			"materialId": 1,
 			"sectionId": 1,
 			"loadId": -1
 		}, {
 			"id": 3,
-			"nodeId_i": 2,
-			"nodeId_j": 3,
+			"nodeId1": 2,
+			"nodeId2": 3,
 			"materialId": 1,
 			"sectionId": 1,
 			"loadId": -1
 		}, {
 			"id": 4,
-			"nodeId_i": 2,
-			"nodeId_j": 6,
+			"nodeId1": 2,
+			"nodeId2": 6,
 			"materialId": 1,
 			"sectionId": 1,
 			"loadId": -1
 		}, {
 			"id": 5,
-			"nodeId_i": 4,
-			"nodeId_j": 5,
+			"nodeId1": 4,
+			"nodeId2": 5,
 			"materialId": 1,
 			"sectionId": 1,
 			"loadId": -1
 		}, {
 			"id": 6,
-			"nodeId_i": 4,
-			"nodeId_j": 7,
+			"nodeId1": 4,
+			"nodeId2": 7,
 			"materialId": 1,
 			"sectionId": 1,
 			"loadId": -1
 		}, {
 			"id": 7,
-			"nodeId_i": 5,
-			"nodeId_j": 1,
+			"nodeId1": 5,
+			"nodeId2": 1,
 			"materialId": 1,
 			"sectionId": 1,
 			"loadId": -1
 		}, {
 			"id": 8,
-			"nodeId_i": 5,
-			"nodeId_j": 2,
+			"nodeId1": 5,
+			"nodeId2": 2,
 			"materialId": 1,
 			"sectionId": 1,
 			"loadId": -1
 		}, {
 			"id": 9,
-			"nodeId_i": 5,
-			"nodeId_j": 6,
+			"nodeId1": 5,
+			"nodeId2": 6,
 			"materialId": 1,
 			"sectionId": 1,
 			"loadId": 1
 		}, {
 			"id": 10,
-			"nodeId_i": 5,
-			"nodeId_j": 8,
+			"nodeId1": 5,
+			"nodeId2": 8,
 			"materialId": 1,
 			"sectionId": 1,
 			"loadId": -1
 		}, {
 			"id": 11,
-			"nodeId_i": 6,
-			"nodeId_j": 3,
+			"nodeId1": 6,
+			"nodeId2": 3,
 			"materialId": 1,
 			"sectionId": 1,
 			"loadId": -1
 		}, {
 			"id": 12,
-			"nodeId_i": 7,
-			"nodeId_j": 5,
+			"nodeId1": 7,
+			"nodeId2": 5,
 			"materialId": 1,
 			"sectionId": 1,
 			"loadId": -1
 		}, {
 			"id": 13,
-			"nodeId_i": 7,
-			"nodeId_j": 8,
+			"nodeId1": 7,
+			"nodeId2": 8,
 			"materialId": 1,
 			"sectionId": 1,
 			"loadId": -1
