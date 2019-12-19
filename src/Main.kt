@@ -5,7 +5,7 @@ class Main {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            StructureModel(File("test2PF.json"))
+            StructureModel(File("testVDOF.json"))
         }
     }
 }

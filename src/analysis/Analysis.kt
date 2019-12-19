@@ -183,9 +183,8 @@ class Analysis(
      */
     fun doAnalysis(): Pair<ArrayList<ElementResult>, ArrayList<NodeResult>> {
         val matrixK = calculateStiffnessMatrix()
-        println(matrixK)
+        matrixK.showNullValues()
         val vectorF = calculateLoadVector()
-        println(vectorF.contentToString())
         val matrixKb = calculateStiffnessMatrixBoundaryCondition(matrixK)
         val vectorD = calculateDisplacementsVector(matrixKb, vectorF)
         val vectorR = calculateSupportReactionsVector(vectorF, vectorD)

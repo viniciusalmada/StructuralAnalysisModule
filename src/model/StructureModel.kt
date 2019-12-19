@@ -22,10 +22,11 @@ class StructureModel(file: File) {
         val dataModel = Gson().fromJson(FileReader(file), StructureDataModel::class.java)
         loadModel(dataModel)
         mAnalysisType = Analysis(this, dataModel.analysis)
-        val res = mAnalysisType.doAnalysis()
-        val gson = Gson()
-        val str = gson.toJson(res)
-        println(str)
+        mAnalysisType.doAnalysis()
+//        val res = mAnalysisType.doAnalysis()
+//        val gson = Gson()
+//        val str = gson.toJson(res)
+//        println(str)
     }
 
     private fun loadModel(dataModel: StructureDataModel) {

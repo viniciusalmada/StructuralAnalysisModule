@@ -33,6 +33,25 @@ fun DoubleArray.showAsNodeDirections(title: String) {
     println(out)
 }
 
+fun DoubleMatrix.showNullValues() {
+    val string = Array(this.rows) { CharArray(this.cols) }
+    this.forEachRowColumn { r, c, v ->
+        if (v == 0.0)
+            string[r][c] = '-'
+        else
+            string[r][c] = '0'
+    }
+    val vals = StringBuffer()
+    string.forEachIndexed { index, chars ->
+        string[index].forEach {
+            vals.append(it)
+            vals.append("\t")
+        }
+        vals.append("\n")
+    }
+    println(vals.toString())
+}
+
 fun DoubleArray.subVectorFromIncidence(incidence: IntArray): DoubleArray {
     val res = DoubleArray(incidence.size)
     incidence.forEachIndexed { index, i -> res[index] = this[i - 1] }
